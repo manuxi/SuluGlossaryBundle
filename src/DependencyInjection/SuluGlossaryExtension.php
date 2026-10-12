@@ -53,6 +53,27 @@ class SuluGlossaryExtension extends Extension implements PrependExtensionInterfa
             ]);
         }
 
+        if ($container->hasExtension('sulu_search')) {
+            $container->prependExtensionConfig('sulu_search', [
+                'admin' => [
+                    'resources' => [
+                        GlossaryEntry::RESOURCE_KEY => [
+                            'name' => 'sulu_glossary.glossary_entries',
+                            'icon' => 'su-tag-pen',
+                            'route' => [
+                                'name' => GlossaryEntryAdmin::EDIT_TABS_VIEW,
+                                'resultToRoute' => [
+                                    'resourceId' => 'id',
+                                    'locale' => 'locale',
+                                ],
+                            ],
+                            'securityContext' => GlossaryEntry::SECURITY_CONTEXT,
+                        ],
+                    ],
+                ],
+            ]);
+        }
+
         if ($container->hasExtension('sulu_admin')) {
             $container->prependExtensionConfig('sulu_admin', [
                 'lists' => [

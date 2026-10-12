@@ -9,7 +9,6 @@ use Doctrine\ORM\Tools\SchemaTool;
 use Manuxi\SuluGlossaryBundle\Entity\GlossaryEntry;
 use Manuxi\SuluGlossaryBundle\Repository\GlossaryEntryRepositoryInterface;
 use Sulu\Bundle\TestBundle\Testing\SuluTestCase;
-use Sulu\Bundle\TrashBundle\Application\TrashManager\TrashManagerInterface;
 use Sulu\Bundle\TrashBundle\Domain\Repository\TrashItemRepositoryInterface;
 
 class TrashRoundTripTest extends SuluTestCase
@@ -45,13 +44,7 @@ class TrashRoundTripTest extends SuluTestCase
         $this->assertNotNull($trashItem);
         $this->assertSame('ISO', $trashItem->getResourceTitle('en'));
 
-        /** @var TrashManagerInterface $trashManager */
-        $trashManager = static::getContainer()->get('sulu_trash.trash_manager');
-        $trashManager->restore($trashItem);
-        /** @var EntityManagerInterface $currentEntityManager */
-        $currentEntityManager = static::getContainer()->get('doctrine.orm.entity_manager');
-        $currentEntityManager->flush();
-        $currentEntityManager->clear();
+        $client->request('POST', '/admin/api/trash-items/' . $trashItem->getId() . '?action=restore');
 
         $client->request('GET', '/admin/api/glossary-entries/' . $id . '?locale=en');
         $this->assertSame(200, $client->getResponse()->getStatusCode(), (string) $client->getResponse()->getContent());

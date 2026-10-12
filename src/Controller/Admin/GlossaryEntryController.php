@@ -329,7 +329,7 @@ class GlossaryEntryController implements SecuredControllerInterface
 
         $this->trashManager->store(GlossaryEntry::RESOURCE_KEY, $glossaryEntry);
         $this->repository->remove($glossaryEntry);
-        $this->domainEventCollector->collect(new RemovedEvent($id, $title, $locale, ['locales' => $availableLocales]));
+        $this->domainEventCollector->collect(new RemovedEvent($id, $title, $locale, [], ['locales' => $availableLocales]));
         $this->entityManager->flush();
 
         return new Response('', 204);

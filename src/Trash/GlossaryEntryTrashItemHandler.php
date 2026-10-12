@@ -154,7 +154,7 @@ class GlossaryEntryTrashItemHandler implements StoreTrashItemHandlerInterface, R
             return $glossaryEntry;
         }
 
-        $this->domainEventCollector->collect(new RestoredEvent($uuid, $title, null, ['locales' => $locales] + $restoreData));
+        $this->domainEventCollector->collect(new RestoredEvent($uuid, $title, null, $restoreData, ['locales' => $locales]));
 
         return $glossaryEntry;
     }

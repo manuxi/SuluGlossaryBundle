@@ -11,12 +11,14 @@ abstract class AbstractEvent extends DomainEvent
 {
     /**
      * @param array<string, mixed> $payload
+     * @param array<string, mixed> $context
      */
     public function __construct(
         private readonly string $glossaryEntryId,
         private readonly ?string $title = null,
         private readonly ?string $locale = null,
         private readonly array $payload = [],
+        private readonly array $context = [],
     ) {
         parent::__construct();
     }
@@ -29,6 +31,26 @@ abstract class AbstractEvent extends DomainEvent
     public function getLocale(): ?string
     {
         return $this->locale;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function getEventContext(): array
+    {
+        return $this->context;
+    }
+
+    /**
+     * Locales which were available before the event, used to update search indexes of removed entries.
+     *
+     * @return string[]|null
+     */
+    public function getAllLocales(): ?array
+    {
+        $locales = $this->context['locales'] ?? null;
+
+        return \is_array($locales) ? array_values($locales) : null;
     }
 
     /**

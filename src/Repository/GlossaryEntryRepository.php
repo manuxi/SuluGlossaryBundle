@@ -108,6 +108,27 @@ class GlossaryEntryRepository implements GlossaryEntryRepositoryInterface
         return (int) $queryBuilder->getQuery()->getSingleScalarResult();
     }
 
+    public function findVersions(GlossaryEntry $glossaryEntry, string $locale): array
+    {
+        /** @var GlossaryEntryDimensionContent[] $versions */
+        $versions = $this->entityManager->createQueryBuilder()
+            ->select('dimensionContent')
+            ->from(GlossaryEntryDimensionContent::class, 'dimensionContent')
+            ->where('dimensionContent.glossaryEntry = :glossaryEntry')
+            ->andWhere('dimensionContent.locale = :locale')
+            ->andWhere('dimensionContent.stage = :stage')
+            ->andWhere('dimensionContent.version > :version')
+            ->setParameter('glossaryEntry', $glossaryEntry->getUuid())
+            ->setParameter('locale', $locale)
+            ->setParameter('stage', DimensionContentInterface::STAGE_DRAFT)
+            ->setParameter('version', DimensionContentInterface::CURRENT_VERSION)
+            ->orderBy('dimensionContent.version', 'DESC')
+            ->getQuery()
+            ->getResult();
+
+        return $versions;
+    }
+
     public function add(GlossaryEntry $glossaryEntry): void
     {
         $this->entityManager->persist($glossaryEntry);

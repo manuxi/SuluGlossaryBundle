@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Manuxi\SuluGlossaryBundle\Repository;
 
 use Manuxi\SuluGlossaryBundle\Entity\GlossaryEntry;
+use Manuxi\SuluGlossaryBundle\Entity\GlossaryEntryDimensionContent;
 use Manuxi\SuluGlossaryBundle\Exception\GlossaryEntryNotFoundException;
 use Sulu\Content\Domain\Model\DimensionContentInterface;
 
@@ -55,6 +56,13 @@ interface GlossaryEntryRepositoryInterface
      * @param array<string, mixed> $filters
      */
     public function countBy(array $filters = []): int;
+
+    /**
+     * Returns the stored versions (draft stage, version greater than zero) of the given locale.
+     *
+     * @return GlossaryEntryDimensionContent[]
+     */
+    public function findVersions(GlossaryEntry $glossaryEntry, string $locale): array;
 
     public function add(GlossaryEntry $glossaryEntry): void;
 

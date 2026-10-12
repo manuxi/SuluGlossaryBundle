@@ -135,3 +135,58 @@ services:
             - '%kernel.environment%'
         tags:
             - { name: sulu.sitemap.provider }
+
+    Manuxi\SuluGlossaryBundle\Search\GlossaryEntryAdminReindexProvider:
+        arguments:
+            - '@doctrine.orm.entity_manager'
+        tags:
+            - { name: cmsig_seal.reindex_provider }
+
+    Manuxi\SuluGlossaryBundle\Search\GlossaryEntryWebsiteReindexProvider:
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@sulu_core.webspace.webspace_manager'
+        tags:
+            - { name: cmsig_seal.reindex_provider }
+
+    Manuxi\SuluGlossaryBundle\Search\GlossaryEntryIndexListener:
+        arguments:
+            - '@sulu_message_bus'
+        tags:
+            - { name: kernel.event_listener, event: Manuxi\SuluGlossaryBundle\Domain\Event\CreatedEvent, method: onDraftChanged }
+            - { name: kernel.event_listener, event: Manuxi\SuluGlossaryBundle\Domain\Event\ModifiedEvent, method: onDraftChanged }
+            - { name: kernel.event_listener, event: Manuxi\SuluGlossaryBundle\Domain\Event\RemovedEvent, method: onDraftChanged }
+            - { name: kernel.event_listener, event: Manuxi\SuluGlossaryBundle\Domain\Event\RestoredEvent, method: onDraftChanged }
+            - { name: kernel.event_listener, event: Manuxi\SuluGlossaryBundle\Domain\Event\TranslationRestoredEvent, method: onDraftChanged }
+            - { name: kernel.event_listener, event: Manuxi\SuluGlossaryBundle\Domain\Event\TranslationRemovedEvent, method: onDraftChanged }
+            - { name: kernel.event_listener, event: Manuxi\SuluGlossaryBundle\Domain\Event\CopiedLanguageEvent, method: onDraftChanged }
+            - { name: kernel.event_listener, event: Manuxi\SuluGlossaryBundle\Domain\Event\VersionRestoredEvent, method: onDraftChanged }
+            - { name: kernel.event_listener, event: Manuxi\SuluGlossaryBundle\Domain\Event\DraftRemovedEvent, method: onDraftChanged }
+            - { name: kernel.event_listener, event: Manuxi\SuluGlossaryBundle\Domain\Event\PublishedEvent, method: onLiveChanged }
+            - { name: kernel.event_listener, event: Manuxi\SuluGlossaryBundle\Domain\Event\UnpublishedEvent, method: onLiveChanged }
+            - { name: kernel.event_listener, event: Manuxi\SuluGlossaryBundle\Domain\Event\RemovedEvent, method: onLiveChanged }
+            - { name: kernel.event_listener, event: Manuxi\SuluGlossaryBundle\Domain\Event\TranslationRemovedEvent, method: onLiveChanged }
+
+    Manuxi\SuluGlossaryBundle\EventSubscriber\GlossaryEntryCacheInvalidationSubscriber:
+        arguments:
+            - '@?sulu_http_cache.cache_manager'
+            - '@Manuxi\SuluGlossaryBundle\Repository\GlossaryEntryRepositoryInterface'
+            - '@sulu_content.content_aggregator'
+        tags:
+            - { name: kernel.event_subscriber }
+
+    Manuxi\SuluGlossaryBundle\Reference\GlossaryEntryReferenceRefresher:
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@sulu_reference.reference_repository'
+            - '@sulu_content.content_view_resolver'
+            - '@sulu_content.content_merger'
+        tags:
+            - { name: sulu_reference.refresher }
+
+    Manuxi\SuluGlossaryBundle\Versioning\VersionPruner:
+        arguments:
+            - '@Manuxi\SuluGlossaryBundle\Repository\GlossaryEntryRepositoryInterface'
+            - '%sulu_glossary.versioning.max_versions%'
+        tags:
+            - { name: kernel.event_listener, event: workflow.content_workflow.completed.publish, method: onPublish }
