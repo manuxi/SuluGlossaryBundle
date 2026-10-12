@@ -44,20 +44,20 @@
             <environments>
                 <environment type="prod">
                     <urls>
-                        <url language="de">{host}</url>
-                        <url language="en">{host}/en</url>
+                        <url language="de">sulu.lo</url>
+                        <url language="en">sulu.lo/en</url>
                     </urls>
                 </environment>
                 <environment type="dev">
                     <urls>
-                        <url language="de">{host}</url>
-                        <url language="en">{host}/en</url>
+                        <url language="de">sulu.lo</url>
+                        <url language="en">sulu.lo/en</url>
                     </urls>
                 </environment>
                 <environment type="test">
                     <urls>
-                        <url language="de">{host}</url>
-                        <url language="en">{host}/en</url>
+                        <url language="de">sulu.lo</url>
+                        <url language="en">sulu.lo/en</url>
                     </urls>
                 </environment>
             </environments>

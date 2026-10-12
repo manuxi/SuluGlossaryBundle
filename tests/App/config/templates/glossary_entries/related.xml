@@ -1,0 +1,78 @@
+<?xml version="1.0" ?>
+<template xmlns="http://schemas.sulu.io/template/template"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/template-1.0.xsd">
+
+    <key>related</key>
+
+    <view>related</view>
+    <controller>Sulu\Content\UserInterface\Controller\Website\ContentController::indexAction</controller>
+    <cacheLifetime>604800</cacheLifetime>
+
+    <meta>
+        <title lang="en">Related</title>
+    </meta>
+
+    <properties>
+        <property name="title" type="text_line" mandatory="true">
+            <meta>
+                <title lang="en">Title</title>
+            </meta>
+            <tag name="sulu.rlp.part"/>
+        </property>
+
+        <property name="url" type="route" mandatory="true">
+            <meta>
+                <title lang="en">Resourcelocator</title>
+            </meta>
+            <params>
+                <param name="route_schema" value="/glossary/{implode('-', object)}"/>
+            </params>
+            <tag name="sulu.rlp"/>
+        </property>
+
+        <property name="explanation" type="text_area">
+            <meta>
+                <title lang="en">Explanation</title>
+            </meta>
+        </property>
+
+        <property name="related" type="glossary_entry_selection">
+            <meta>
+                <title lang="en">Related</title>
+            </meta>
+            <params>
+                <param name="properties" type="collection">
+                    <param name="id" value="object.resource.id"/>
+                    <param name="title" value="title"/>
+                    <param name="explanation" value="explanation"/>
+                </param>
+            </params>
+        </property>
+
+        <property name="main" type="single_glossary_entry_selection">
+            <meta>
+                <title lang="en">Main</title>
+            </meta>
+            <params>
+                <param name="properties" type="collection">
+                    <param name="id" value="object.resource.id"/>
+                    <param name="title" value="title"/>
+                </param>
+            </params>
+        </property>
+
+        <property name="smart" type="smart_content">
+            <meta>
+                <title lang="en">Smart</title>
+            </meta>
+            <params>
+                <param name="provider" value="glossary_entries"/>
+                <param name="properties" type="collection">
+                    <param name="id" value="object.resource.id"/>
+                    <param name="title" value="title"/>
+                </param>
+            </params>
+        </property>
+    </properties>
+</template>

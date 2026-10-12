@@ -12,6 +12,8 @@ require $file;
 
 date_default_timezone_set('UTC');
 
+(new Symfony\Component\Filesystem\Filesystem())->remove(__DIR__ . '/../var/cache');
+
 $_SERVER['APP_ENV'] = $_ENV['APP_ENV'] = 'test';
 $_SERVER['APP_DEBUG'] = $_ENV['APP_DEBUG'] = '1';
 
