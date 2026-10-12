@@ -11,3 +11,7 @@ parameters:
             message: '#is never assigned int so it can be removed from the property type#'
             identifier: property.unusedType
             path: src/Entity
+        -
+            message: '#generic class Symfony\\Component\\Workflow\\Event\\CompletedEvent (but )?does not specify its types#'
+            identifier: missingType.generics
+            reportUnmatched: false
