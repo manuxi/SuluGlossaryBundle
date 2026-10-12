@@ -4,7 +4,7 @@ parameters:
         - src
         - tests
     excludePaths:
-        - tests/App/var
+        - tests/App/var (?)
     tmpDir: var/cache/phpstan
     ignoreErrors:
         -
