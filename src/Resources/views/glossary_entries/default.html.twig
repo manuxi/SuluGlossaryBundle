@@ -1,0 +1,24 @@
+{% extends "base.html.twig" %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-12 mb-3">
+                <h1>{{ content.title }}</h1>
+                <p>
+                    <span class="badge">{{ ('sulu_glossary.type.' ~ (content.type|default('term')))|trans({}, 'messages') }}</span>
+                    {{ content.explanation }}
+                </p>
+
+                {% if content.description %}
+                    <div>{{ content.description|raw }}</div>
+                {% endif %}
+
+                {% if content.image and content.image.id %}
+                    {% set media = sulu_resolve_media(content.image.id, app.request.locale) %}
+                    <img src="{{ asset(media.thumbnails['sulu-240x']) }}" alt="{{ content.title }}">
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

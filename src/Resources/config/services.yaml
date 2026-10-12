@@ -60,3 +60,26 @@ services:
             - { name: sulu_trash.store_trash_item_handler }
             - { name: sulu_trash.restore_trash_item_handler }
             - { name: sulu_trash.restore_configuration_provider }
+
+    Manuxi\SuluGlossaryBundle\Routing\GlossaryEntryRouteDefaultsProvider:
+        arguments:
+            - '@Manuxi\SuluGlossaryBundle\Repository\GlossaryEntryRepositoryInterface'
+            - '@sulu_content.content_aggregator'
+            - '@sulu_admin.metadata_provider_registry'
+            - '@sulu_http_cache.cache_lifetime.resolver'
+        tags:
+            - { name: sulu_route.route_defaults_provider, resource_key: glossary_entries }
+
+    sulu_glossary.preview_object_provider:
+        class: Sulu\Content\Infrastructure\Sulu\Preview\ContentObjectProvider
+        arguments:
+            - '@sulu_admin.metadata_provider_registry'
+            - '@doctrine.orm.entity_manager'
+            - '@sulu_content.content_aggregator'
+            - '@sulu_content.content_data_mapper'
+            - Manuxi\SuluGlossaryBundle\Entity\GlossaryEntry
+            - sulu.glossary.entries
+            - '@sulu_content.content_normalizer'
+        tags:
+            - { name: sulu.context, context: admin }
+            - { name: sulu_preview.object_provider, provider-key: glossary_entries }
