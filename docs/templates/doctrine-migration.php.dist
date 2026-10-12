@@ -1,0 +1,61 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DoctrineMigrations;
+
+use Doctrine\DBAL\Platforms\AbstractMySQLPlatform;
+use Doctrine\DBAL\Schema\Schema;
+use Doctrine\Migrations\AbstractMigration;
+
+/**
+ * Creates the tables of SuluGlossaryBundle 1.0 (MySQL / MariaDB).
+ *
+ * Copy this file to your "migrations" directory and rename it (e.g. Version20261201000000.php) and the class
+ * accordingly, or generate your own migration with "bin/console doctrine:migrations:diff" for other platforms.
+ * The tables of SuluAbbreviationsBundle 2.0 (abbr_*) are not touched, drop them manually after the data was
+ * migrated with "bin/console sulu:glossary:migrate-from-2x".
+ */
+final class VersionXXXXXXXXXXXXXX extends AbstractMigration
+{
+    public function getDescription(): string
+    {
+        return 'Create the tables of SuluGlossaryBundle 1.0';
+    }
+
+    public function up(Schema $schema): void
+    {
+        $this->abortIf(
+            !$this->connection->getDatabasePlatform() instanceof AbstractMySQLPlatform,
+            'This migration template only supports MySQL / MariaDB, generate a migration with doctrine:migrations:diff for other platforms.'
+        );
+
+        $this->addSql('CREATE TABLE glossary_entries (uuid VARCHAR(36) NOT NULL, created DATETIME NOT NULL, changed DATETIME NOT NULL, idUsersCreator INT DEFAULT NULL, idUsersChanger INT DEFAULT NULL, INDEX IDX_A21F4E33DBF11E1D (idUsersCreator), INDEX IDX_A21F4E3330D07CD5 (idUsersChanger), PRIMARY KEY (uuid)) DEFAULT CHARACTER SET utf8mb4');
+        $this->addSql('CREATE TABLE glossary_entry_settings (toggle_header TINYINT DEFAULT NULL, toggle_hero TINYINT DEFAULT NULL, toggle_breadcrumbs TINYINT DEFAULT NULL, page_glossary VARCHAR(255) DEFAULT NULL, id INT AUTO_INCREMENT NOT NULL, created DATETIME NOT NULL, changed DATETIME NOT NULL, idUsersCreator INT DEFAULT NULL, idUsersChanger INT DEFAULT NULL, INDEX IDX_A6EF80BDBF11E1D (idUsersCreator), INDEX IDX_A6EF80B30D07CD5 (idUsersChanger), PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8mb4');
+        $this->addSql('CREATE TABLE glossary_entry_dimension_contents (title VARCHAR(191) DEFAULT NULL, explanation VARCHAR(255) DEFAULT NULL, type VARCHAR(32) DEFAULT NULL, id INT AUTO_INCREMENT NOT NULL, stage VARCHAR(15) NOT NULL, locale VARCHAR(15) DEFAULT NULL, ghostLocale VARCHAR(15) DEFAULT NULL, availableLocales JSON DEFAULT NULL, version INT NOT NULL, templateKey VARCHAR(64) DEFAULT NULL, templateData JSON NOT NULL, seoData JSON NOT NULL, seoNoIndex TINYINT NOT NULL, seoNoFollow TINYINT NOT NULL, seoHideInSitemap TINYINT NOT NULL, excerptData JSON NOT NULL, excerptSegment VARCHAR(255) DEFAULT NULL, authored DATETIME DEFAULT NULL, lastModified DATETIME DEFAULT NULL, workflowPlace VARCHAR(31) DEFAULT NULL, workflowPublished DATETIME DEFAULT NULL, created DATETIME NOT NULL, changed DATETIME NOT NULL, glossaryEntryUuid VARCHAR(36) NOT NULL, route_id INT DEFAULT NULL, author_id INT DEFAULT NULL, idUsersCreator INT DEFAULT NULL, idUsersChanger INT DEFAULT NULL, INDEX idx_glossary_entry_dimension_contents_dimension (stage, locale), INDEX idx_glossary_entry_dimension_contents_locale (locale), INDEX idx_glossary_entry_dimension_contents_stage (stage), INDEX idx_glossary_entry_dimension_contents_version (version), INDEX idx_glossary_entry_dimension_contents_stage_version_locale (stage, version, locale), INDEX idx_glossary_entry_dimension_contents_resource_lookup (glossaryEntryUuid, stage, version, locale, ghostLocale), INDEX idx_glossary_entry_dimension_contents_template_key (templateKey), INDEX idx_glossary_entry_dimension_contents_resource_template_lookup (glossaryEntryUuid, stage, version, locale, templateKey), INDEX idx_glossary_entry_dimension_contents_workflow_place (workflowPlace), INDEX idx_glossary_entry_dimension_contents_workflow_published (workflowPublished), INDEX IDX_A323C80237FAEF13 (glossaryEntryUuid), INDEX IDX_A323C80234ECB4E6 (route_id), INDEX IDX_A323C802F675F31B (author_id), INDEX IDX_A323C802DBF11E1D (idUsersCreator), INDEX IDX_A323C80230D07CD5 (idUsersChanger), PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8mb4');
+        $this->addSql('CREATE TABLE glossary_entry_dimension_content_excerpt_tags (glossary_entry_dimension_content_id INT NOT NULL, tag_id INT NOT NULL, INDEX IDX_6222A83629E753F7 (glossary_entry_dimension_content_id), INDEX IDX_6222A836BAD26311 (tag_id), PRIMARY KEY (glossary_entry_dimension_content_id, tag_id)) DEFAULT CHARACTER SET utf8mb4');
+        $this->addSql('CREATE TABLE glossary_entry_dimension_content_excerpt_categories (glossary_entry_dimension_content_id INT NOT NULL, category_id INT NOT NULL, INDEX IDX_8B314B029E753F7 (glossary_entry_dimension_content_id), INDEX IDX_8B314B012469DE2 (category_id), PRIMARY KEY (glossary_entry_dimension_content_id, category_id)) DEFAULT CHARACTER SET utf8mb4');
+        $this->addSql('ALTER TABLE glossary_entries ADD CONSTRAINT FK_A21F4E33DBF11E1D FOREIGN KEY (idUsersCreator) REFERENCES se_users (id) ON DELETE SET NULL');
+        $this->addSql('ALTER TABLE glossary_entries ADD CONSTRAINT FK_A21F4E3330D07CD5 FOREIGN KEY (idUsersChanger) REFERENCES se_users (id) ON DELETE SET NULL');
+        $this->addSql('ALTER TABLE glossary_entry_settings ADD CONSTRAINT FK_A6EF80BDBF11E1D FOREIGN KEY (idUsersCreator) REFERENCES se_users (id) ON DELETE SET NULL');
+        $this->addSql('ALTER TABLE glossary_entry_settings ADD CONSTRAINT FK_A6EF80B30D07CD5 FOREIGN KEY (idUsersChanger) REFERENCES se_users (id) ON DELETE SET NULL');
+        $this->addSql('ALTER TABLE glossary_entry_dimension_contents ADD CONSTRAINT FK_A323C80237FAEF13 FOREIGN KEY (glossaryEntryUuid) REFERENCES glossary_entries (uuid) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE glossary_entry_dimension_contents ADD CONSTRAINT FK_A323C80234ECB4E6 FOREIGN KEY (route_id) REFERENCES ro_routes (id) ON DELETE SET NULL');
+        $this->addSql('ALTER TABLE glossary_entry_dimension_contents ADD CONSTRAINT FK_A323C802F675F31B FOREIGN KEY (author_id) REFERENCES co_contacts (id) ON DELETE SET NULL');
+        $this->addSql('ALTER TABLE glossary_entry_dimension_contents ADD CONSTRAINT FK_A323C802DBF11E1D FOREIGN KEY (idUsersCreator) REFERENCES se_users (id) ON DELETE SET NULL');
+        $this->addSql('ALTER TABLE glossary_entry_dimension_contents ADD CONSTRAINT FK_A323C80230D07CD5 FOREIGN KEY (idUsersChanger) REFERENCES se_users (id) ON DELETE SET NULL');
+        $this->addSql('ALTER TABLE glossary_entry_dimension_content_excerpt_tags ADD CONSTRAINT FK_6222A83629E753F7 FOREIGN KEY (glossary_entry_dimension_content_id) REFERENCES glossary_entry_dimension_contents (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE glossary_entry_dimension_content_excerpt_tags ADD CONSTRAINT FK_6222A836BAD26311 FOREIGN KEY (tag_id) REFERENCES ta_tags (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE glossary_entry_dimension_content_excerpt_categories ADD CONSTRAINT FK_8B314B029E753F7 FOREIGN KEY (glossary_entry_dimension_content_id) REFERENCES glossary_entry_dimension_contents (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE glossary_entry_dimension_content_excerpt_categories ADD CONSTRAINT FK_8B314B012469DE2 FOREIGN KEY (category_id) REFERENCES ca_categories (id) ON DELETE CASCADE');
+    }
+
+    public function down(Schema $schema): void
+    {
+        $this->addSql('DROP TABLE glossary_entry_dimension_content_excerpt_categories');
+        $this->addSql('DROP TABLE glossary_entry_dimension_content_excerpt_tags');
+        $this->addSql('DROP TABLE glossary_entry_dimension_contents');
+        $this->addSql('DROP TABLE glossary_entry_settings');
+        $this->addSql('DROP TABLE glossary_entries');
+    }
+}

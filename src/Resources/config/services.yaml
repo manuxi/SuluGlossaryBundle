@@ -207,3 +207,27 @@ services:
             - '@doctrine.orm.entity_manager'
         tags:
             - { name: twig.extension }
+
+    Manuxi\SuluGlossaryBundle\Migration\FromTwoMigrator:
+        arguments:
+            - '@doctrine.dbal.default_connection'
+            - '@doctrine.orm.entity_manager'
+            - '@Manuxi\SuluGlossaryBundle\Repository\GlossaryEntryRepositoryInterface'
+            - '@sulu_content.content_manager'
+            - '@sulu_content.content_workflow'
+
+    Manuxi\SuluGlossaryBundle\Migration\ProviderAliasMigrator:
+        arguments:
+            - '@doctrine.dbal.default_connection'
+
+    Manuxi\SuluGlossaryBundle\Command\MigrateFromTwoCommand:
+        arguments:
+            - '@Manuxi\SuluGlossaryBundle\Migration\FromTwoMigrator'
+        tags:
+            - { name: console.command }
+
+    Manuxi\SuluGlossaryBundle\Command\MigratePageReferencesCommand:
+        arguments:
+            - '@Manuxi\SuluGlossaryBundle\Migration\ProviderAliasMigrator'
+        tags:
+            - { name: console.command }
