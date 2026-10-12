@@ -1,81 +1,109 @@
-# SuluGlossaryBundle
+# SuluGlossaryBundle!
+![ci workflow](https://github.com/manuxi/SuluGlossaryBundle/actions/workflows/ci.yml/badge.svg)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/manuxi/SuluGlossaryBundle/blob/1.x/LICENSE)
+![GitHub Tag](https://img.shields.io/github/v/tag/manuxi/SuluGlossaryBundle)
+![Github Release](https://img.shields.io/github/v/release/manuxi/SuluGlossaryBundle?color=116ea3)
+![Supports Sulu 3.0 or later](https://img.shields.io/badge/%20Sulu->=3.0-0088cc?color=00b2df)
 
-[English version](README.md)
+[🇬🇧 English Version](README.md)
 
-Glossar-Bundle für Sulu 3. Es verwaltet Abkürzungen, Akronyme und Begriffe mit Erklärung, einer Detailseite pro Eintrag und den Content-Funktionen von Sulu: Entwurf und Live-Inhalt pro Sprache, Versionen, SEO- und Excerpt-Daten, Suche, Referenzen, Papierkorb und zeitgesteuertes Veröffentlichen.
+Das SuluGlossaryBundle erweitert Sulu 3.0 um ein Glossar für Abkürzungen, Akronyme und Begriffe.
 
-Das Bundle ist der Nachfolger von `manuxi/sulu-abbreviations-bundle` (Sulu 2). Ein Befehl migriert die Daten des Releases 2.0, siehe [UPGRADE.de.md](UPGRADE.de.md).
+Jeder Eintrag hat einen Typ, eine Erklärung, optional Beschreibung, Bild und Link sowie eine eigene Detailseite. Die Einträge nutzen die Content-Funktionen von Sulu: Entwurf und Live-Inhalt pro Sprache, Versionen, SEO- und Excerpt-Daten, Suche, Referenzen und zeitgesteuertes Veröffentlichen.
 
-## Funktionen
+Dieses Bundle ist der Nachfolger von `manuxi/sulu-abbreviations-bundle` (Sulu 2). Die Daten des Releases 2.0 können mit einem Befehl migriert werden, siehe [UPGRADE.de.md](UPGRADE.de.md).
 
-- Glossar-Einträge mit **Typ** (`abbreviation`, `acronym`, `term`), Titel, Erklärung, Beschreibung, Bild und Link
-- Entwurf und Live-Inhalt pro Sprache, [Veröffentlichen](docs/publishing.de.md) und [Übersetzungen](docs/translations.de.md)
-- [Versionen](docs/versions.de.md) mit Wiederherstellung
-- SEO, Excerpt, Kategorien, Tags und Autor
-- Detailseite mit Route pro Sprache, [Sitemap](docs/links-sitemap-preview.de.md), Links, Vorschau
-- [Auswahl-Feldtypen](docs/selection-field-types.de.md), [Smart Content](docs/smart-content.de.md) und [Teaser](docs/teaser.de.md)
-- [Twig-Funktionen](docs/twig.de.md) und ein optionaler `abbr`-Filter
-- [Suche](docs/search.de.md) (Admin- und Website-Index), [Referenzen](docs/references.de.md), [HTTP-Cache](docs/http-cache.de.md)
-- [Zeitgesteuertes Veröffentlichen](docs/automation.de.md) mit `sulu/automation-bundle`
-- Papierkorb und Aktivitätsprotokoll
-- [Einstellungen](docs/settings.de.md) (Header, Hero, Breadcrumbs, Übersichtsseite)
+## ✨ Features
 
-## Voraussetzungen
+### 📚 Glossar-Verwaltung
+- **Eintragstypen** - Abkürzung, Akronym oder Begriff
+- **Umfangreiche Inhalte** - Titel, Erklärung, Beschreibung, Bild und Link
+- **Entwurf & Live** - Getrennter Entwurf und Live-Inhalt pro Sprache, Veröffentlichen und Zurückziehen
+- **Versionen** - Ältere Versionen in den Entwurf wiederherstellen
+- **SEO & Excerpt** - Vollständige SEO- und Excerpt-Verwaltung
+- **Mehrsprachig** - Vollständige Übersetzungsunterstützung, In Sprache kopieren
+- **Autoren-Verwaltung** - Kontakte können als Autoren zugewiesen werden
+- **Einstellungen** - Header, Hero, Breadcrumbs und Übersichtsseite
+- **Weiteres** - Papierkorb, Referenzen, Sitemaps, Teaser, Vorschau, Aktivitätsprotokoll, usw.
+
+### 🔄 Erweiterte Features
+- **Auswahl-Feldtypen** - Einen oder mehrere Einträge in Seiten, Snippets und anderen Templates auswählen
+- **Smart Content** - Einträge nach Kategorien und Tags gefiltert auflisten
+- **Twig-Funktionen** - Einträge in Templates auflösen, optionaler `abbr`-Filter für automatisches Markup
+- **Suche** - Admin- und Website-Index (SEAL)
+- **HTTP-Cache** - Tagging und automatische Invalidierung
+- **Zeitgesteuertes Veröffentlichen** - Veröffentlichen und Zurückziehen zu einem Zeitpunkt (`sulu/automation-bundle`)
+- **Migration** - Befehl zur Migration der Daten des SuluAbbreviationsBundle 2.0
+
+## 📋 Voraussetzungen
 
 - PHP 8.2 oder höher
-- Sulu 3.0 (`sulu/sulu ^3.0`)
+- Sulu CMS 3.0 oder höher
+- Symfony 6.4 oder höher
+- MySQL 5.7+ / MariaDB 10.2+ / PostgreSQL 11+
 
-## Installation
+## 👩🏻‍🏭 Installation
 
-```console
+### Schritt 1: Paket installieren
+
+```bash
 composer require manuxi/sulu-glossary-bundle
 ```
 
-Bundle in `config/bundles.php` registrieren:
+Falls du *nicht* Symfony Flex verwendest, füge das Bundle in `config/bundles.php` hinzu:
 
 ```php
 return [
-    // ...
+    //...
     Manuxi\SuluGlossaryBundle\SuluGlossaryBundle::class => ['all' => true],
 ];
 ```
 
-Admin-Routen in `config/routes/sulu_admin.yaml` importieren:
+### Schritt 2: Routen konfigurieren
+
+Zu `routes_admin.yaml` hinzufügen:
 
 ```yaml
-sulu_glossary_admin_api:
-    resource: Manuxi\SuluGlossaryBundle\Controller\Admin\GlossaryEntryController
-    type: attribute
-    options:
-        expose: true
-
-sulu_glossary_settings_admin_api:
-    resource: Manuxi\SuluGlossaryBundle\Controller\Admin\SettingsController
-    type: attribute
-    options:
-        expose: true
+SuluGlossaryBundle:
+    resource: '@SuluGlossaryBundle/Resources/config/routes_admin.yaml'
 ```
 
-Datenbanktabellen anlegen (`glossary_entries`, `glossary_entry_dimension_contents`, `glossary_entry_settings`):
+### Schritt 3: Datenbank aktualisieren
 
-```console
-bin/console doctrine:migrations:diff
-bin/console doctrine:migrations:migrate
+```bash
+# Prüfe was erstellt wird
+php bin/console doctrine:schema:update --dump-sql
+
+# Führe Migration aus
+php bin/console doctrine:schema:update --force
 ```
 
-Eine MySQL-Migrationsvorlage liegt in [docs/templates/doctrine-migration.php.dist](docs/templates/doctrine-migration.php.dist).
+Mit Doctrine Migrations wird `doctrine:migrations:diff` verwendet. Eine MySQL-Migrationsvorlage liegt in [docs/templates/doctrine-migration.php.dist](docs/templates/doctrine-migration.php.dist).
 
-Suchindizes neu aufbauen (das Bundle registriert einen Reindex-Provider für den Index `admin` und den Index `website` der SEAL-Suche von Sulu):
+### Schritt 4: Suchindex neu aufbauen
 
-```console
-bin/console sulu:search:reindex
+```bash
+php bin/console sulu:search:reindex
 ```
 
-Berechtigungen unter **Einstellungen > Benutzerrollen** vergeben: Sicherheitskontext `sulu.glossary.entries` (anzeigen, hinzufügen, bearbeiten, löschen, live) und `sulu.glossary.settings` (anzeigen, bearbeiten).
+### Schritt 5: Berechtigungen erteilen
 
-## Verwendung
+1. Gehe zu Sulu Admin → Einstellungen → Benutzerrollen
+2. Finde die passende Rolle
+3. Aktiviere die Berechtigungen für die Glossar-Einträge (`sulu.glossary.entries`) und die Glossar-Einstellungen (`sulu.glossary.settings`)
+4. Lade die Seite neu
 
-### Auswahl und Smart Content
+## 🎣 Verwendung
+
+### Ersten Eintrag erstellen
+
+1. Navigiere zu **Glossar** in der Sulu-Admin-Navigation
+2. Klicke auf **Hinzufügen**
+3. Wähle den Typ, gib Titel und Erklärung ein
+4. Ergänze Beschreibung, Bild und Link (optional)
+5. Veröffentliche deinen Eintrag
+
+### Einträge in Templates verwenden
 
 ```xml
 <property name="entries" type="glossary_entry_selection">
@@ -83,42 +111,18 @@ Berechtigungen unter **Einstellungen > Benutzerrollen** vergeben: Sicherheitskon
         <title lang="de">Glossar-Einträge</title>
     </meta>
 </property>
-
-<property name="entry" type="single_glossary_entry_selection">
-    <meta>
-        <title lang="de">Glossar-Eintrag</title>
-    </meta>
-</property>
-
-<property name="list" type="smart_content">
-    <meta>
-        <title lang="de">Glossar</title>
-    </meta>
-    <params>
-        <param name="provider" value="glossary_entries"/>
-        <param name="max_per_page" value="10"/>
-    </params>
-</property>
 ```
-
-### Twig
 
 ```twig
 {% set entry = sulu_resolve_glossary_entry(id) %}
 {% if entry %}
     <abbr title="{{ entry.explanation }}">{{ entry.title }}</abbr>
 {% endif %}
-
-{% for entry in sulu_get_glossary_entries(20) %}
-    {{ entry.title }} ({{ entry.type }})
-{% endfor %}
 ```
 
-### Eigene Templates
+Weitere Beispiele: [Auswahl-Feldtypen](docs/selection-field-types.de.md), [Smart Content](docs/smart-content.de.md), [Twig](docs/twig.de.md).
 
-Das Bundle liefert das Template `default`. Eigene Templates liegen in `config/templates/glossary_entries/*.xml` (Template-Typ `glossary_entry`), eigene Views in `templates/`.
-
-## Konfiguration
+## 🧶 Konfiguration
 
 ```yaml
 # config/packages/sulu_glossary.yaml
@@ -129,20 +133,40 @@ sulu_glossary:
         auto_abbr: false   # aktiviert den Twig-Filter abbr
 ```
 
-## Dokumentation
+Weitere Optionen: [Einstellungen](docs/settings.de.md)
 
-Alle Funktionsdokumente gibt es auf Englisch und Deutsch im Verzeichnis [docs](docs).
+## 📖 Dokumentation
 
-## Mitwirken
+Detaillierte Dokumentation im [docs/](docs/) Verzeichnis.
 
-Pull Requests sind willkommen. Bitte vorher die Prüfungen ausführen:
+- [Typen](docs/types.de.md) - Abkürzung, Akronym, Begriff
+- [Veröffentlichen](docs/publishing.de.md) - Entwurf, Live und Aktivitätsprotokoll
+- [Übersetzungen](docs/translations.de.md) - In Sprache kopieren, Übersetzung löschen
+- [Versionen](docs/versions.de.md) - Versionen und Wiederherstellung
+- [Auswahl-Feldtypen](docs/selection-field-types.de.md) - Einträge in Templates auswählen
+- [Smart Content](docs/smart-content.de.md) - Filtern nach Kategorien und Tags auf der Website
+- [Teaser](docs/teaser.de.md) - Teaser-Provider
+- [Twig](docs/twig.de.md) - Funktionen, `abbr`-Filter und Standard-View
+- [Links, Sitemap & Vorschau](docs/links-sitemap-preview.de.md) - Links, Sitemap, Vorschau und Papierkorb
+- [Suche](docs/search.de.md) - Admin- und Website-Index
+- [Referenzen](docs/references.de.md) - Wo Einträge verwendet werden
+- [HTTP-Cache](docs/http-cache.de.md) - Tagging und Invalidierung
+- [Automatisierung](docs/automation.de.md) - Zeitgesteuertes Veröffentlichen
+- [Einstellungen](docs/settings.de.md) - Header, Hero, Breadcrumbs, Übersichtsseite
+- [Upgrade vom SuluAbbreviationsBundle](docs/upgrade-from-abbreviations.de.md) - Migration der Daten
 
-```console
-composer test
-composer phpstan
-composer cs
-```
+## 👩‍🍳 Mitwirken
 
-## Lizenz
+Beiträge sind willkommen! Bitte erstelle Issues oder Pull Requests.
 
-MIT, siehe [LICENSE](LICENSE).
+## 📝 Lizenz
+
+Dieses Bundle ist unter der MIT-Lizenz lizenziert. Siehe [LICENSE](LICENSE).
+
+## 🎉 Credits
+
+Erstellt und gewartet von [manuxi](https://github.com/manuxi).
+
+Danke an das Sulu-Team für das tolle CMS und den fantastischen Support!
+
+Und danke an *Dich* für Deine Mithilfe, Tests und Bugsuche!
