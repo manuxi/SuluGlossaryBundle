@@ -1,0 +1,11 @@
+sulu_glossary_admin_api:
+    resource: Manuxi\SuluGlossaryBundle\Controller\Admin\GlossaryEntryController
+    type: attribute
+    options:
+        expose: true
+
+sulu_glossary_settings_admin_api:
+    resource: Manuxi\SuluGlossaryBundle\Controller\Admin\SettingsController
+    type: attribute
+    options:
+        expose: true

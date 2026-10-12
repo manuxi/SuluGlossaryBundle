@@ -1,0 +1,59 @@
+sulu_glossary:
+    glossary: "Glossary"
+    glossary_entries: "Glossary entries"
+    title: "Title"
+    explanation: "Explanation"
+    type_label: "Type"
+    published_state: "Status"
+    glossary_entry_selection_label: "{count} {count, plural, =1 {glossary entry} other {glossary entries}} selected"
+    select_glossary_entry: "Select glossary entry"
+    select_glossary_entries: "Select glossary entries"
+    no_glossary_entry_selected: "No glossary entry selected"
+
+    template:
+        default: "Glossary entry"
+
+    form:
+        title: "Term"
+        explanation: "Long form"
+        description: "Description"
+        type: "Type"
+        image: "Image"
+        link: "Link"
+
+    type:
+        abbreviation: "Abbreviation"
+        acronym: "Acronym"
+        term: "Term"
+
+    config:
+        tab: "Settings"
+        title:
+            navi: "Settings"
+            general: "Settings for single view"
+            breadcrumbs: "Intermediate pages (breadcrumbs)"
+        properties:
+            toggle_header: "Display header"
+            toggle_hero: "Display default hero"
+            toggle_breadcrumbs: "Display breadcrumbs"
+            page_glossary: "Glossary overview page"
+
+sulu_activity:
+    resource:
+        glossary_entries: "Glossary entry"
+        glossary_settings: "Glossary settings"
+    description:
+        glossary_entries:
+            created: "{userFullName} created the glossary entry \"{resourceTitle}\"."
+            modified: "{userFullName} modified the glossary entry \"{resourceTitle}\"."
+            removed: "{userFullName} deleted the glossary entry \"{resourceTitle}\"."
+            restored: "{userFullName} restored the glossary entry \"{resourceTitle}\"."
+            translation_restored: "{userFullName} restored a translation of the glossary entry \"{resourceTitle}\"."
+            published: "{userFullName} published the glossary entry \"{resourceTitle}\"."
+            unpublished: "{userFullName} unpublished the glossary entry \"{resourceTitle}\"."
+            draft_removed: "{userFullName} discarded the draft of the glossary entry \"{resourceTitle}\"."
+            copied_language: "{userFullName} copied the glossary entry \"{resourceTitle}\" to another language."
+            translation_removed: "{userFullName} deleted a translation of the glossary entry \"{resourceTitle}\"."
+            version_restored: "{userFullName} restored a version of the glossary entry \"{resourceTitle}\"."
+        glossary_settings:
+            modified: "{userFullName} modified the glossary settings."

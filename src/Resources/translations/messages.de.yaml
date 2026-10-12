@@ -1,0 +1,7 @@
+sulu_glossary:
+    glossary: "Glossar"
+    glossary_entry: "Glossareintrag"
+    type:
+        abbreviation: "Abkürzung"
+        acronym: "Akronym"
+        term: "Begriff"

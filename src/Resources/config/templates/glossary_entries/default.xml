@@ -1,0 +1,101 @@
+<?xml version="1.0" ?>
+<template xmlns="http://schemas.sulu.io/template/template"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/template-1.0.xsd">
+
+    <key>default</key>
+
+    <view>@SuluGlossary/glossary_entries/default</view>
+    <controller>Sulu\Content\UserInterface\Controller\Website\ContentController::indexAction</controller>
+    <cacheLifetime>604800</cacheLifetime>
+
+    <meta>
+        <title>sulu_glossary.template.default</title>
+    </meta>
+
+    <properties>
+        <property name="title" type="text_line" mandatory="true">
+            <meta>
+                <title>sulu_glossary.form.title</title>
+            </meta>
+
+            <params>
+                <param name="headline" value="true"/>
+            </params>
+
+            <tag name="sulu.rlp.part"/>
+        </property>
+
+        <property name="url" type="route" mandatory="true">
+            <meta>
+                <title>sulu_admin.url</title>
+            </meta>
+
+            <params>
+                <param name="route_schema" value="/glossary/{implode('-', object)}"/>
+            </params>
+
+            <tag name="sulu.rlp"/>
+        </property>
+
+        <property name="type" type="single_select" multilingual="false" mandatory="true" colspan="4">
+            <meta>
+                <title>sulu_glossary.form.type</title>
+            </meta>
+
+            <params>
+                <param name="default_value" value="term"/>
+                <param name="values" type="collection">
+                    <param name="abbreviation">
+                        <meta>
+                            <title>sulu_glossary.type.abbreviation</title>
+                        </meta>
+                    </param>
+                    <param name="acronym">
+                        <meta>
+                            <title>sulu_glossary.type.acronym</title>
+                        </meta>
+                    </param>
+                    <param name="term">
+                        <meta>
+                            <title>sulu_glossary.type.term</title>
+                        </meta>
+                    </param>
+                </param>
+            </params>
+        </property>
+
+        <property name="explanation" type="text_area" mandatory="true" colspan="8">
+            <meta>
+                <title>sulu_glossary.form.explanation</title>
+            </meta>
+        </property>
+
+        <property name="description" type="text_editor">
+            <meta>
+                <title>sulu_glossary.form.description</title>
+            </meta>
+        </property>
+
+        <property name="image" type="single_media_selection" colspan="6">
+            <meta>
+                <title>sulu_glossary.form.image</title>
+            </meta>
+
+            <params>
+                <param name="types" value="image"/>
+            </params>
+        </property>
+
+        <property name="link" type="link" colspan="6">
+            <meta>
+                <title>sulu_glossary.form.link</title>
+            </meta>
+
+            <params>
+                <param name="enable_anchor" value="true"/>
+                <param name="enable_attributes" value="true"/>
+            </params>
+        </property>
+    </properties>
+</template>

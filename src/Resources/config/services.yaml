@@ -1,0 +1,62 @@
+services:
+    _defaults:
+        autowire: false
+        autoconfigure: false
+        public: false
+
+    Manuxi\SuluGlossaryBundle\Admin\GlossaryEntryAdmin:
+        arguments:
+            - '@sulu_admin.view_builder_factory'
+            - '@sulu_content.content_view_builder_factory'
+            - '@sulu_security.security_checker'
+            - '@sulu.core.localization_manager'
+            - '@sulu_activity.activity_list_view_builder_factory'
+            - '@sulu_reference.reference_list_view_builder_factory'
+            - '@?sulu_automation.automation_view_builder_factory'
+        tags:
+            - { name: sulu.admin }
+            - { name: sulu.context, context: admin }
+
+    Manuxi\SuluGlossaryBundle\Admin\SettingsAdmin:
+        arguments:
+            - '@sulu_admin.view_builder_factory'
+            - '@sulu_security.security_checker'
+        tags:
+            - { name: sulu.admin }
+            - { name: sulu.context, context: admin }
+
+    Manuxi\SuluGlossaryBundle\Repository\GlossaryEntryRepository:
+        public: true
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@sulu_content.dimension_content_query_enhancer'
+
+    Manuxi\SuluGlossaryBundle\Repository\GlossaryEntryRepositoryInterface:
+        alias: Manuxi\SuluGlossaryBundle\Repository\GlossaryEntryRepository
+
+    Manuxi\SuluGlossaryBundle\Application\GlossaryEntryTranslationRemover:
+        arguments:
+            - '@Manuxi\SuluGlossaryBundle\Repository\GlossaryEntryRepositoryInterface'
+            - '@sulu_activity.domain_event_collector'
+            - '@sulu_trash.trash_manager'
+
+    Manuxi\SuluGlossaryBundle\Content\DataMapper\GlossaryEntryTypeDataMapper:
+        tags:
+            - { name: sulu_content.data_mapper }
+
+    Manuxi\SuluGlossaryBundle\Content\Merger\GlossaryEntryTypeMerger:
+        tags:
+            - { name: sulu_content.merger }
+
+    Manuxi\SuluGlossaryBundle\Trash\GlossaryEntryTrashItemHandler:
+        arguments:
+            - '@sulu_trash.trash_item_repository'
+            - '@Manuxi\SuluGlossaryBundle\Repository\GlossaryEntryRepositoryInterface'
+            - '@sulu_content.content_normalizer'
+            - '@sulu_content.content_merger'
+            - '@sulu_content.content_manager'
+            - '@sulu_activity.domain_event_collector'
+        tags:
+            - { name: sulu_trash.store_trash_item_handler }
+            - { name: sulu_trash.restore_trash_item_handler }
+            - { name: sulu_trash.restore_configuration_provider }

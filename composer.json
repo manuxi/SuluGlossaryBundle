@@ -1,0 +1,72 @@
+{
+    "name": "manuxi/sulu-glossary-bundle",
+    "description": "Glossary bundle for Sulu CMS: abbreviations, acronyms and terms with draft/live publishing",
+    "type": "symfony-bundle",
+    "keywords": [
+        "sulu",
+        "suluCms",
+        "sulu bundle",
+        "glossary",
+        "abbreviations"
+    ],
+    "homepage": "https://github.com/manuxi/SuluGlossaryBundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Manuxi"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "doctrine/doctrine-bundle": "^2.13",
+        "sulu/sulu": "^3.0",
+        "symfony/config": "^6.4 | ^7.0",
+        "symfony/console": "^6.4 | ^7.0",
+        "symfony/dependency-injection": "^6.4 | ^7.0",
+        "symfony/event-dispatcher": "^6.4 | ^7.0",
+        "symfony/framework-bundle": "^6.4 | ^7.0",
+        "symfony/http-foundation": "^6.4 | ^7.0",
+        "symfony/http-kernel": "^6.4 | ^7.0",
+        "symfony/intl": "^6.4 | ^7.0",
+        "symfony/routing": "^6.4 | ^7.0",
+        "symfony/security-core": "^6.4 | ^7.0",
+        "symfony/translation": "^6.4 | ^7.0",
+        "symfony/uid": "^6.4 | ^7.0"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.64",
+        "phpstan/phpstan": "^2.1",
+        "phpunit/phpunit": "^10.5 | ^11.0",
+        "symfony/browser-kit": "^6.4 | ^7.0",
+        "symfony/phpunit-bridge": "^6.4 | ^7.0"
+    },
+    "suggest": {
+        "sulu/automation-bundle": "Allows to schedule publishing and unpublishing of glossary entries",
+        "manuxi/sulu-admin-extras-bundle": "Provides additional admin components such as the ghost locale and publish state field types"
+    },
+    "autoload": {
+        "psr-4": {
+            "Manuxi\\SuluGlossaryBundle\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Manuxi\\SuluGlossaryBundle\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": [
+            "@phpunit"
+        ],
+        "phpunit": "vendor/bin/phpunit",
+        "phpstan": "vendor/bin/phpstan analyse --memory-limit=1G",
+        "cs": "vendor/bin/php-cs-fixer fix --dry-run --diff",
+        "cs-fix": "vendor/bin/php-cs-fixer fix"
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true,
+            "symfony/flex": true
+        }
+    }
+}

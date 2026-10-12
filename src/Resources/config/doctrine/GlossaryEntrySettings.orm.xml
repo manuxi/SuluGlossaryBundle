@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="Manuxi\SuluGlossaryBundle\Entity\GlossaryEntrySettings" table="glossary_entry_settings">
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO"/>
+        </id>
+
+        <field name="toggleHeader" type="boolean" nullable="true"/>
+        <field name="toggleHero" type="boolean" nullable="true"/>
+        <field name="toggleBreadcrumbs" type="boolean" nullable="true"/>
+        <field name="pageGlossary" type="string" nullable="true"/>
+    </entity>
+</doctrine-mapping>

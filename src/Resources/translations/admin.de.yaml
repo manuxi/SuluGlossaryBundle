@@ -1,0 +1,59 @@
+sulu_glossary:
+    glossary: "Glossar"
+    glossary_entries: "Glossareinträge"
+    title: "Titel"
+    explanation: "Erklärung"
+    type_label: "Typ"
+    published_state: "Status"
+    glossary_entry_selection_label: "{count} {count, plural, =1 {Glossareintrag} other {Glossareinträge}} ausgewählt"
+    select_glossary_entry: "Glossareintrag auswählen"
+    select_glossary_entries: "Glossareinträge auswählen"
+    no_glossary_entry_selected: "Kein Glossareintrag ausgewählt"
+
+    template:
+        default: "Glossareintrag"
+
+    form:
+        title: "Begriff"
+        explanation: "Langform"
+        description: "Beschreibung"
+        type: "Typ"
+        image: "Bild"
+        link: "Link"
+
+    type:
+        abbreviation: "Abkürzung"
+        acronym: "Akronym"
+        term: "Begriff"
+
+    config:
+        tab: "Einstellungen"
+        title:
+            navi: "Einstellungen"
+            general: "Einstellungen für die Einzelansicht"
+            breadcrumbs: "Zwischenseiten (Breadcrumbs)"
+        properties:
+            toggle_header: "Header anzeigen"
+            toggle_hero: "Standard-Hero anzeigen"
+            toggle_breadcrumbs: "Breadcrumbs anzeigen"
+            page_glossary: "Übersichtsseite des Glossars"
+
+sulu_activity:
+    resource:
+        glossary_entries: "Glossareintrag"
+        glossary_settings: "Glossar-Einstellungen"
+    description:
+        glossary_entries:
+            created: "{userFullName} hat den Glossareintrag \"{resourceTitle}\" erstellt."
+            modified: "{userFullName} hat den Glossareintrag \"{resourceTitle}\" geändert."
+            removed: "{userFullName} hat den Glossareintrag \"{resourceTitle}\" gelöscht."
+            restored: "{userFullName} hat den Glossareintrag \"{resourceTitle}\" wiederhergestellt."
+            translation_restored: "{userFullName} hat eine Übersetzung des Glossareintrags \"{resourceTitle}\" wiederhergestellt."
+            published: "{userFullName} hat den Glossareintrag \"{resourceTitle}\" veröffentlicht."
+            unpublished: "{userFullName} hat die Veröffentlichung des Glossareintrags \"{resourceTitle}\" zurückgezogen."
+            draft_removed: "{userFullName} hat den Entwurf des Glossareintrags \"{resourceTitle}\" verworfen."
+            copied_language: "{userFullName} hat den Glossareintrag \"{resourceTitle}\" in eine andere Sprache kopiert."
+            translation_removed: "{userFullName} hat eine Übersetzung des Glossareintrags \"{resourceTitle}\" gelöscht."
+            version_restored: "{userFullName} hat eine Version des Glossareintrags \"{resourceTitle}\" wiederhergestellt."
+        glossary_settings:
+            modified: "{userFullName} hat die Glossar-Einstellungen geändert."

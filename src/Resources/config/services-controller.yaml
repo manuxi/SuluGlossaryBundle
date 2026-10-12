@@ -1,0 +1,35 @@
+services:
+    _defaults:
+        autowire: false
+        autoconfigure: false
+        public: false
+
+    Manuxi\SuluGlossaryBundle\Controller\Admin\GlossaryEntryController:
+        public: true
+        arguments:
+            - '@Manuxi\SuluGlossaryBundle\Repository\GlossaryEntryRepositoryInterface'
+            - '@serializer'
+            - '@sulu_content.content_manager'
+            - '@sulu_content.content_workflow'
+            - '@sulu_content.content_hash_checker'
+            - '@doctrine.orm.entity_manager'
+            - '@sulu_core.list_builder.field_descriptor_factory'
+            - '@sulu_core.doctrine_list_builder_factory'
+            - '@sulu_core.doctrine_rest_helper'
+            - '@sulu_security.security_checker'
+            - '@sulu_activity.domain_event_collector'
+            - '@sulu_trash.trash_manager'
+            - '@Manuxi\SuluGlossaryBundle\Application\GlossaryEntryTranslationRemover'
+            - '%sulu_core.is_single_locale%'
+        tags:
+            - { name: controller.service_arguments }
+            - { name: sulu.context, context: admin }
+
+    Manuxi\SuluGlossaryBundle\Controller\Admin\SettingsController:
+        public: true
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@sulu_activity.domain_event_collector'
+        tags:
+            - { name: controller.service_arguments }
+            - { name: sulu.context, context: admin }
