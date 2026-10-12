@@ -9,6 +9,7 @@ use Manuxi\SuluGlossaryBundle\Domain\Event\PublishedEvent;
 use Manuxi\SuluGlossaryBundle\Domain\Event\RemovedEvent;
 use Manuxi\SuluGlossaryBundle\Domain\Event\TranslationRemovedEvent;
 use Manuxi\SuluGlossaryBundle\Domain\Event\UnpublishedEvent;
+use Manuxi\SuluGlossaryBundle\Entity\GlossaryEntry;
 use Manuxi\SuluGlossaryBundle\Repository\GlossaryEntryRepositoryInterface;
 use Sulu\Bundle\CategoryBundle\Entity\CategoryInterface;
 use Sulu\Bundle\HttpCacheBundle\Cache\CacheManagerInterface;
@@ -20,6 +21,8 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class GlossaryEntryCacheInvalidationSubscriber implements EventSubscriberInterface
 {
+    public const LIST_REFERENCE_ID = 'list';
+
     public function __construct(
         private readonly ?CacheManagerInterface $cacheManager,
         private readonly GlossaryEntryRepositoryInterface $repository,
@@ -44,12 +47,14 @@ class GlossaryEntryCacheInvalidationSubscriber implements EventSubscriberInterfa
         }
 
         $this->cacheManager->invalidateTag($event->getResourceId());
+        $this->cacheManager->invalidateReference(GlossaryEntry::RESOURCE_KEY, self::LIST_REFERENCE_ID);
         $this->invalidateTaxonomies($event);
     }
 
     public function onRemoved(AbstractEvent $event): void
     {
         $this->cacheManager?->invalidateTag($event->getResourceId());
+        $this->cacheManager?->invalidateReference(GlossaryEntry::RESOURCE_KEY, self::LIST_REFERENCE_ID);
     }
 
     private function invalidateTaxonomies(AbstractEvent $event): void

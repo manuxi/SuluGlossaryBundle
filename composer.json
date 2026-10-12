@@ -39,7 +39,8 @@
         "phpunit/phpunit": "^10.5 | ^11.0",
         "symfony/browser-kit": "^6.4 | ^7.0",
         "symfony/phpunit-bridge": "^6.4 | ^7.0",
-        "cmsig/seal-memory-adapter": "^0.12"
+        "cmsig/seal-memory-adapter": "^0.12",
+        "sulu/automation-bundle": "^3.0"
     },
     "suggest": {
         "sulu/automation-bundle": "Allows to schedule publishing and unpublishing of glossary entries",

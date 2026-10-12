@@ -37,7 +37,6 @@ use Sulu\Content\Application\ContentManager\ContentManagerInterface;
 use Sulu\Content\Application\ContentWorkflow\ContentWorkflowInterface;
 use Sulu\Content\Domain\Model\DimensionContentInterface;
 use Sulu\Content\Domain\Model\WorkflowInterface;
-use Sulu\Content\Infrastructure\Doctrine\DimensionContentQueryEnhancer;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -246,18 +245,7 @@ class GlossaryEntryController implements SecuredControllerInterface
         $locale = $this->getLocale($request);
 
         try {
-            $glossaryEntry = $this->repository->getOneBy(
-                ['uuid' => $id, 'locale' => $locale],
-                [
-                    GlossaryEntryRepositoryInterface::SELECT_GLOSSARY_ENTRY_CONTENT => [
-                        'selects' => [DimensionContentQueryEnhancer::GROUP_SELECT_CONTENT_ADMIN => true],
-                        'dimensionAttributes' => [
-                            'locale' => $locale,
-                            'stage' => [DimensionContentInterface::STAGE_DRAFT, DimensionContentInterface::STAGE_LIVE],
-                        ],
-                    ],
-                ]
-            );
+            $glossaryEntry = $this->repository->getOneWithContent($id, $locale);
         } catch (GlossaryEntryNotFoundException $exception) {
             return new JsonResponse((new EntityNotFoundException($exception->getModel(), $id, $exception))->toArray(), 404);
         }
@@ -290,7 +278,7 @@ class GlossaryEntryController implements SecuredControllerInterface
         $this->checkActionPermission($request);
 
         try {
-            $glossaryEntry = $this->repository->getOneBy(['uuid' => $id]);
+            $glossaryEntry = $this->repository->getOneWithContent($id, $this->getLocale($request), 'restore' === $request->query->getString('action') ? $request->query->getInt('version') : null);
         } catch (GlossaryEntryNotFoundException $exception) {
             return new JsonResponse((new EntityNotFoundException($exception->getModel(), $id, $exception))->toArray(), 404);
         }

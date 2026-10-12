@@ -13,6 +13,7 @@ use Sulu\Bundle\AdminBundle\Admin\View\DropdownToolbarAction;
 use Sulu\Bundle\AdminBundle\Admin\View\ToolbarAction;
 use Sulu\Bundle\AdminBundle\Admin\View\ViewBuilderFactoryInterface;
 use Sulu\Bundle\AdminBundle\Admin\View\ViewCollection;
+use Sulu\Bundle\AutomationBundle\Admin\View\AutomationViewBuilderFactoryInterface;
 use Sulu\Bundle\ReferenceBundle\Infrastructure\Sulu\Admin\View\ReferenceViewBuilderFactoryInterface;
 use Sulu\Component\Localization\Manager\LocalizationManagerInterface;
 use Sulu\Component\Security\Authorization\PermissionTypes;
@@ -36,7 +37,7 @@ class GlossaryEntryAdmin extends Admin
         private readonly LocalizationManagerInterface $localizationManager,
         private readonly ActivityViewBuilderFactoryInterface $activityViewBuilderFactory,
         private readonly ReferenceViewBuilderFactoryInterface $referenceViewBuilderFactory,
-        private readonly ?object $automationViewBuilderFactory = null,
+        private readonly ?AutomationViewBuilderFactoryInterface $automationViewBuilderFactory = null,
     ) {
     }
 

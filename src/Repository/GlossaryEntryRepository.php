@@ -62,6 +62,28 @@ class GlossaryEntryRepository implements GlossaryEntryRepositoryInterface
         return $glossaryEntry;
     }
 
+    public function getOneWithContent(string $uuid, string $locale, ?int $version = null): GlossaryEntry
+    {
+        $dimensionAttributes = [
+            'locale' => $locale,
+            'stage' => [DimensionContentInterface::STAGE_DRAFT, DimensionContentInterface::STAGE_LIVE],
+        ];
+
+        if (null !== $version) {
+            $dimensionAttributes['version'] = [$version, DimensionContentInterface::CURRENT_VERSION];
+        }
+
+        return $this->getOneBy(
+            ['uuid' => $uuid, 'locale' => $locale],
+            [
+                self::SELECT_GLOSSARY_ENTRY_CONTENT => [
+                    'selects' => [DimensionContentQueryEnhancer::GROUP_SELECT_CONTENT_ADMIN => true],
+                    'dimensionAttributes' => $dimensionAttributes,
+                ],
+            ]
+        );
+    }
+
     public function findOneBy(array $filters, array $selects = []): ?GlossaryEntry
     {
         try {

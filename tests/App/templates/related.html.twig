@@ -5,4 +5,8 @@
 <ul id="related">{% for item in content.related|default([]) %}<li>{{ item.title }}</li>{% endfor %}</ul>
 <p id="main">{{ content.main.title|default('') }}</p>
 <ul id="smart">{% for item in content.smart|default([]) %}<li>{{ item.title }}</li>{% endfor %}</ul>
+<div id="abbr">{{ content.explanation|abbr|raw }}</div>
+<ul id="list">{% for entry in sulu_get_glossary_entries(10, null, ['abbreviation']) %}<li>{{ entry.title }}</li>{% endfor %}</ul>
+<p id="resolved">{{ sulu_resolve_glossary_entry(content.main.id|default(''))['title']|default('none') }}</p>
+<p id="settings">{{ load_glossary_settings().toggleHero is same as(null) ? 'default' : 'custom' }}</p>
 {% endblock %}

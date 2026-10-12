@@ -7,14 +7,18 @@ namespace Manuxi\SuluGlossaryBundle\Tests\App;
 use Manuxi\SuluGlossaryBundle\SuluGlossaryBundle;
 use ReflectionClass;
 use Sulu\Bundle\AudienceTargetingBundle\SuluAudienceTargetingBundle;
+use Sulu\Bundle\AutomationBundle\SuluAutomationBundle;
 use Sulu\Bundle\TestBundle\Kernel\SuluTestKernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
+use Task\TaskBundle\TaskBundle;
 
 class Kernel extends SuluTestKernel
 {
     public function registerBundles(): iterable
     {
         $bundles = [...parent::registerBundles()];
+        $bundles[] = new TaskBundle();
+        $bundles[] = new SuluAutomationBundle();
         $bundles[] = new SuluGlossaryBundle();
 
         foreach ($bundles as $key => $bundle) {

@@ -27,6 +27,14 @@ interface GlossaryEntryRepositoryInterface
     public function getOneBy(array $filters, array $selects = []): GlossaryEntry;
 
     /**
+     * Loads the entry with the draft and live dimension contents of the locale (and the unlocalized ones),
+     * which is required to apply workflow transitions. A version number additionally loads that stored version.
+     *
+     * @throws GlossaryEntryNotFoundException
+     */
+    public function getOneWithContent(string $uuid, string $locale, ?int $version = null): GlossaryEntry;
+
+    /**
      * @param array<string, mixed> $filters
      * @param array<string, mixed> $selects
      */

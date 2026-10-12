@@ -31,7 +31,7 @@ class Configuration implements ConfigurationInterface
                     ->children()
                         ->booleanNode('auto_abbr')
                             ->defaultFalse()
-                            ->info('Registers the "glossary_abbr" twig filter which wraps known terms in abbr tags.')
+                            ->info('Registers the "abbr" twig filter which wraps known abbreviations and acronyms in abbr tags.')
                         ->end()
                     ->end()
                 ->end()

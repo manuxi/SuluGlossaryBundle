@@ -44,7 +44,7 @@ class ContentResolvingTest extends SuluTestCase
             'template' => 'related',
             'title' => 'Hub',
             'url' => '/glossary/hub',
-            'explanation' => 'hub',
+            'explanation' => 'Use the First abbreviation',
             'related' => [$second, $draftOnly, $first],
             'main' => $first,
             'smart' => [
@@ -70,5 +70,9 @@ class ContentResolvingTest extends SuluTestCase
         $this->assertMatchesRegularExpression('#<ul id="related"><li>Second</li><li>First</li></ul>#', $html);
         $this->assertStringContainsString('<p id="main">First</p>', $html);
         $this->assertMatchesRegularExpression('#<ul id="smart"><li>First</li></ul>#', $html);
+        $this->assertStringContainsString('<div id="abbr">Use the <abbr title="one">First</abbr> abbreviation</div>', $html);
+        $this->assertStringContainsString('<ul id="list"><li>First</li></ul>', $html);
+        $this->assertStringContainsString('<p id="resolved">First</p>', $html);
+        $this->assertStringContainsString('<p id="settings">default</p>', $html);
     }
 }

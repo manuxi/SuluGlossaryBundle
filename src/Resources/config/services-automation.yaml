@@ -1,1 +1,23 @@
-services: {}
+services:
+    _defaults:
+        autowire: false
+        autoconfigure: false
+        public: false
+
+    Manuxi\SuluGlossaryBundle\TaskHandler\GlossaryEntryPublishTaskHandler:
+        arguments:
+            - '@Manuxi\SuluGlossaryBundle\Repository\GlossaryEntryRepositoryInterface'
+            - '@sulu_content.content_workflow'
+            - '@sulu_activity.domain_event_collector'
+            - '@doctrine.orm.entity_manager'
+        tags:
+            - { name: task.handler }
+
+    Manuxi\SuluGlossaryBundle\TaskHandler\GlossaryEntryUnpublishTaskHandler:
+        arguments:
+            - '@Manuxi\SuluGlossaryBundle\Repository\GlossaryEntryRepositoryInterface'
+            - '@sulu_content.content_workflow'
+            - '@sulu_activity.domain_event_collector'
+            - '@doctrine.orm.entity_manager'
+        tags:
+            - { name: task.handler }

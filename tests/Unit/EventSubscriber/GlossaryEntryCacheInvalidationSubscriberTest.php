@@ -52,9 +52,14 @@ class GlossaryEntryCacheInvalidationSubscriberTest extends TestCase
         $this->aggregator->method('aggregate')->with($entry, ['locale' => 'en', 'stage' => 'live'])->willReturn($dimensionContent);
 
         $this->cacheManager->expects($this->once())->method('invalidateTag')->with('uuid-1');
-        $this->cacheManager->expects($this->once())->method('invalidateReference')->with('tags', '5');
+        $references = [];
+        $this->cacheManager->expects($this->exactly(2))->method('invalidateReference')->willReturnCallback(static function (string $resourceKey, string $id) use (&$references): void {
+            $references[] = [$resourceKey, $id];
+        });
 
         $this->subscriber->onPublishedOrUnpublished(new PublishedEvent('uuid-1', 'WHO', 'en'));
+
+        $this->assertSame([['glossary_entries', 'list'], ['tags', '5']], $references);
     }
 
     public function testUnpublishWithoutLiveContentOnlyInvalidatesTheTag(): void
@@ -64,7 +69,7 @@ class GlossaryEntryCacheInvalidationSubscriberTest extends TestCase
         $this->aggregator->method('aggregate')->willThrowException(new ContentNotFoundException($entry, []));
 
         $this->cacheManager->expects($this->once())->method('invalidateTag')->with('uuid-1');
-        $this->cacheManager->expects($this->never())->method('invalidateReference');
+        $this->cacheManager->expects($this->once())->method('invalidateReference')->with('glossary_entries', 'list');
 
         $this->subscriber->onPublishedOrUnpublished(new UnpublishedEvent('uuid-1', 'WHO', 'en'));
     }
@@ -72,6 +77,7 @@ class GlossaryEntryCacheInvalidationSubscriberTest extends TestCase
     public function testRemovalInvalidatesTheTag(): void
     {
         $this->cacheManager->expects($this->once())->method('invalidateTag')->with('uuid-1');
+        $this->cacheManager->expects($this->once())->method('invalidateReference')->with('glossary_entries', 'list');
 
         $this->subscriber->onRemoved(new RemovedEvent('uuid-1', 'WHO', 'en'));
     }

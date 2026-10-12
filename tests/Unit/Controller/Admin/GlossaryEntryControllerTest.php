@@ -122,14 +122,14 @@ class GlossaryEntryControllerTest extends TestCase
 
     public function testPutReturnsNotFoundForUnknownEntry(): void
     {
-        $this->repository->method('getOneBy')->willThrowException(new GlossaryEntryNotFoundException(['uuid' => 'x']));
+        $this->repository->method('getOneWithContent')->willThrowException(new GlossaryEntryNotFoundException(['uuid' => 'x']));
 
         $this->assertSame(404, $this->controller->putAction(new Request(['locale' => 'en']), 'x')->getStatusCode());
     }
 
     public function testPostTriggerReturnsNotFoundForUnknownEntry(): void
     {
-        $this->repository->method('getOneBy')->willThrowException(new GlossaryEntryNotFoundException(['uuid' => 'x']));
+        $this->repository->method('getOneWithContent')->willThrowException(new GlossaryEntryNotFoundException(['uuid' => 'x']));
 
         $this->assertSame(404, $this->controller->postTriggerAction(new Request(['locale' => 'en', 'action' => 'publish']), 'x')->getStatusCode());
     }
@@ -140,7 +140,7 @@ class GlossaryEntryControllerTest extends TestCase
             $this->callback(static fn (SecurityCondition $condition): bool => GlossaryEntry::SECURITY_CONTEXT === $condition->getSecurityContext() && 'en' === $condition->getLocale()),
             PermissionTypes::LIVE
         );
-        $this->repository->method('getOneBy')->willThrowException(new GlossaryEntryNotFoundException(['uuid' => 'x']));
+        $this->repository->method('getOneWithContent')->willThrowException(new GlossaryEntryNotFoundException(['uuid' => 'x']));
 
         $this->controller->postTriggerAction(new Request(['locale' => 'en', 'action' => 'publish']), 'x');
     }
@@ -148,7 +148,7 @@ class GlossaryEntryControllerTest extends TestCase
     public function testPublishAppliesTheTransitionAndCollectsAnEvent(): void
     {
         $entry = new GlossaryEntry('uuid-1');
-        $this->repository->method('getOneBy')->willReturn($entry);
+        $this->repository->method('getOneWithContent')->willReturn($entry);
         $this->contentManager->method('resolve')->willReturn($entry->createDimensionContent());
         $this->contentManager->method('normalize')->willReturn([]);
 
@@ -162,7 +162,7 @@ class GlossaryEntryControllerTest extends TestCase
     public function testCopyLocaleCopiesTheDraftAndCollectsAnEvent(): void
     {
         $entry = new GlossaryEntry('uuid-1');
-        $this->repository->method('getOneBy')->willReturn($entry);
+        $this->repository->method('getOneWithContent')->willReturn($entry);
         $this->contentManager->method('resolve')->willReturn($entry->createDimensionContent());
         $this->contentManager->method('normalize')->willReturn([]);
 
@@ -180,7 +180,7 @@ class GlossaryEntryControllerTest extends TestCase
     public function testRestoreCopiesTheVersionIntoTheDraft(): void
     {
         $entry = new GlossaryEntry('uuid-1');
-        $this->repository->method('getOneBy')->willReturn($entry);
+        $this->repository->method('getOneWithContent')->willReturn($entry);
         $this->contentManager->method('resolve')->willReturn($entry->createDimensionContent());
         $this->contentManager->method('normalize')->willReturn([]);
 
@@ -196,9 +196,20 @@ class GlossaryEntryControllerTest extends TestCase
         $this->controller->postTriggerAction(new Request(['locale' => 'en', 'action' => 'restore', 'version' => '1700000000']), 'uuid-1');
     }
 
+    public function testRestoreLoadsTheRequestedVersion(): void
+    {
+        $entry = new GlossaryEntry('uuid-1');
+        $this->repository->expects($this->once())->method('getOneWithContent')->with('uuid-1', 'en', 1700000000)->willReturn($entry);
+        $this->contentManager->method('copy')->willReturn($entry->createDimensionContent());
+        $this->contentManager->method('resolve')->willReturn($entry->createDimensionContent());
+        $this->contentManager->method('normalize')->willReturn([]);
+
+        $this->controller->postTriggerAction(new Request(['locale' => 'en', 'action' => 'restore', 'version' => '1700000000']), 'uuid-1');
+    }
+
     public function testRestoreWithoutVersionFails(): void
     {
-        $this->repository->method('getOneBy')->willReturn(new GlossaryEntry('uuid-1'));
+        $this->repository->method('getOneWithContent')->willReturn(new GlossaryEntry('uuid-1'));
 
         $this->expectException(InvalidArgumentException::class);
 

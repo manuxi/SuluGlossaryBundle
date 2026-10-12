@@ -190,3 +190,20 @@ services:
             - '%sulu_glossary.versioning.max_versions%'
         tags:
             - { name: kernel.event_listener, event: workflow.content_workflow.completed.publish, method: onPublish }
+
+    Manuxi\SuluGlossaryBundle\Twig\GlossaryTwigExtension:
+        arguments:
+            - '@Manuxi\SuluGlossaryBundle\Repository\GlossaryEntryRepositoryInterface'
+            - '@sulu_content.content_aggregator'
+            - '@sulu_content.content_manager'
+            - '@request_stack'
+            - '%sulu_glossary.twig.auto_abbr%'
+            - '@?sulu_http_cache.reference_store'
+        tags:
+            - { name: twig.extension }
+
+    Manuxi\SuluGlossaryBundle\Twig\GlossarySettingsTwigExtension:
+        arguments:
+            - '@doctrine.orm.entity_manager'
+        tags:
+            - { name: twig.extension }
