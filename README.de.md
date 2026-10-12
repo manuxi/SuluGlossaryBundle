@@ -1,116 +1,148 @@
-# SuluAbbreviationsBundle
-![CI](https://github.com/manuxi/SuluAbbreviationsBundle/actions/workflows/ci.yml/badge.svg?branch=2.x)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/manuxi/SuluAbbreviationsBundle/LICENSE)
-![GitHub Tag](https://img.shields.io/github/v/tag/manuxi/SuluAbbreviationsBundle)
-![Supports Sulu 2.6](https://img.shields.io/badge/%20Sulu-2.6-0088cc?color=00b2df)
-![PHP 8.2+](https://img.shields.io/badge/PHP-%3E%3D8.2-777bb4)
+# SuluGlossaryBundle
 
 [English version](README.md)
 
-Ein Sulu-Bundle zur Verwaltung von Abkürzungen (Glossar-Einträgen) in Projekten. Version 2 basiert auf dem `sulu/content-bundle` und damit auf denselben Konzepten wie Sulu 3.
+Glossar-Bundle für Sulu 3. Es verwaltet Abkürzungen, Akronyme und Begriffe mit Erklärung, einer Detailseite pro Eintrag und den Content-Funktionen von Sulu: Entwurf und Live-Inhalt pro Sprache, Versionen, SEO- und Excerpt-Daten, Suche, Referenzen, Papierkorb und zeitgesteuertes Veröffentlichen.
+
+Das Bundle ist der Nachfolger von `manuxi/sulu-abbreviations-bundle` (Sulu 2). Ein Befehl migriert die Daten des Releases 2.0, siehe [UPGRADE.de.md](UPGRADE.de.md).
 
 ## Funktionen
-- Übersetzbare Inhalte mit **Entwurf und Live**-Version je Sprache, Veröffentlichen / Veröffentlichung beenden / Entwurf verwerfen, zeitgesteuertes Veröffentlichen mit dem Automation-Bundle ([Veröffentlichen](docs/publishing.de.md))
-- Struktur-Template (`name`, `url`, `explanation`, `description`, `image`, `link`), Tabs für SEO und Excerpt, Autor
-- **In Sprache kopieren** und **einzelne Übersetzung löschen** ([Übersetzungen](docs/translations.de.md))
-- **Versionen** bei jeder Veröffentlichung mit Wiederherstellung ([Versionen](docs/versions.de.md))
-- **Referenzen**: wo eine Abkürzung verwendet wird und was sie selbst verwendet ([Referenzen](docs/references.de.md))
-- **HTTP-Cache**: Tagging und Leeren ([HTTP-Cache](docs/http-cache.de.md))
-- Teaser-Provider ([Teaser](docs/teaser.de.md)), Link-Provider, Sitemap-Provider, Smart-Content-Provider ([Smart Content](docs/smart-content.de.md))
-- Feldtypen `abbreviation_selection` / `single_abbreviation_selection` ([Feldtypen](docs/selection-field-types.de.md))
-- Twig-Funktionen und der optionale Filter `abbr` ([Twig](docs/twig.de.md)), Einstellungen ([Einstellungen](docs/settings.de.md))
-- Vorschau, Papierkorb, Aktivitätenprotokoll, Suchindizes (Entwurf und Live)
-- Migration der Daten der Version 1.x ([Upgrade](docs/upgrade-1-to-2.de.md))
 
-Feature-Wünsche sind jederzeit willkommen.
-Das Bundle befindet sich weiterhin in Entwicklung. Nutzung auf eigene Gefahr 🤞🏻
+- Glossar-Einträge mit **Typ** (`abbreviation`, `acronym`, `term`), Titel, Erklärung, Beschreibung, Bild und Link
+- Entwurf und Live-Inhalt pro Sprache, [Veröffentlichen](docs/publishing.de.md) und [Übersetzungen](docs/translations.de.md)
+- [Versionen](docs/versions.de.md) mit Wiederherstellung
+- SEO, Excerpt, Kategorien, Tags und Autor
+- Detailseite mit Route pro Sprache, [Sitemap](docs/links-sitemap-preview.de.md), Links, Vorschau
+- [Auswahl-Feldtypen](docs/selection-field-types.de.md), [Smart Content](docs/smart-content.de.md) und [Teaser](docs/teaser.de.md)
+- [Twig-Funktionen](docs/twig.de.md) und ein optionaler `abbr`-Filter
+- [Suche](docs/search.de.md) (Admin- und Website-Index), [Referenzen](docs/references.de.md), [HTTP-Cache](docs/http-cache.de.md)
+- [Zeitgesteuertes Veröffentlichen](docs/automation.de.md) mit `sulu/automation-bundle`
+- Papierkorb und Aktivitätsprotokoll
+- [Einstellungen](docs/settings.de.md) (Header, Hero, Breadcrumbs, Übersichtsseite)
 
-![image](https://github.com/user-attachments/assets/fbd68da1-710d-436c-bee2-9f83a7a8ca32)
+## Voraussetzungen
 
-## 👩🏻‍🏭 Installation
-Paket installieren:
+- PHP 8.2 oder höher
+- Sulu 3.0 (`sulu/sulu ^3.0`)
+
+## Installation
+
 ```console
-composer require manuxi/sulu-abbreviations-bundle
+composer require manuxi/sulu-glossary-bundle
 ```
-Ohne Symfony Flex müssen die Bundles zusätzlich in `config/bundles.php` registriert werden.
-Das `SuluContentBundle` muss **vor** diesem Bundle registriert werden:
+
+Bundle in `config/bundles.php` registrieren:
 
 ```php
 return [
-    //...
-    Sulu\Bundle\ContentBundle\SuluContentBundle::class => ['all' => true],
-    Manuxi\SuluAbbreviationsBundle\SuluAbbreviationsBundle::class => ['all' => true],
+    // ...
+    Manuxi\SuluGlossaryBundle\SuluGlossaryBundle::class => ['all' => true],
 ];
 ```
-Folgendes in die `routes_admin.yaml` eintragen:
-```yaml
-SuluAbbreviationsBundle:
-    resource: '@SuluAbbreviationsBundle/Resources/config/routes_admin.yaml'
-```
-Den Index der veröffentlichten Abkürzungen in der `sulu_search.yaml` ergänzen. "abbreviations_published" ist der Index des Live-Inhalts, "abbreviations" der Index der Entwürfe. Beide Indizes sind im Admin durchsuchbar.
-```yaml
-sulu_search:
-    website:
-        indexes:
-            - abbreviations_published
-            - ...
-```
-Optional `sulu/automation-bundle` (zeitgesteuertes Veröffentlichen) installieren und den HTTP-Cache von Sulu (`sulu_http_cache`) verwenden.
 
-Zum Schluss muss das Datenbankschema aktualisiert werden. Verwendet werden die Tabellen `abbr_abbreviations`, `abbr_abbreviation_dimension_contents`, `abbr_abbreviation_dimension_content_excerpt_tags`, `abbr_abbreviation_dimension_content_excerpt_categories`, `abbr_abbreviation_versions` und `app_abbreviation_settings`. Eine Doctrine-Migration erzeugen mit
+Admin-Routen in `config/routes/sulu_admin.yaml` importieren:
+
+```yaml
+sulu_glossary_admin_api:
+    resource: Manuxi\SuluGlossaryBundle\Controller\Admin\GlossaryEntryController
+    type: attribute
+    options:
+        expose: true
+
+sulu_glossary_settings_admin_api:
+    resource: Manuxi\SuluGlossaryBundle\Controller\Admin\SettingsController
+    type: attribute
+    options:
+        expose: true
+```
+
+Datenbanktabellen anlegen (`glossary_entries`, `glossary_entry_dimension_contents`, `glossary_entry_settings`):
+
 ```console
-php bin/console doctrine:migrations:diff
+bin/console doctrine:migrations:diff
+bin/console doctrine:migrations:migrate
 ```
-oder die [Migrations-Vorlage](docs/templates/doctrine-migration.php.dist) kopieren (MySQL / MariaDB). Ohne Migrationen `php bin/console doctrine:schema:update --dump-sql` / `--force` verwenden. Dabei nur die Schema-Änderungen dieses Bundles ausführen!
 
-Upgrade von 1.x? Den [Upgrade-Leitfaden](docs/upgrade-1-to-2.de.md) lesen.
+Eine MySQL-Migrationsvorlage liegt in [docs/templates/doctrine-migration.php.dist](docs/templates/doctrine-migration.php.dist).
 
-## 🎣 Verwendung
-Zuerst die Berechtigungen für Abkürzungen vergeben (Sicherheitskontext `sulu.abbreviations.abbreviations`, Berechtigungen view, add, edit, delete und live).
-Nach einem Neuladen erscheint der Menüpunkt für Abkürzungen in der Navigation. Danach können Abkürzungen angelegt werden.
+Suchindizes neu aufbauen (das Bundle registriert einen Reindex-Provider für den Index `admin` und den Index `website` der SEAL-Suche von Sulu):
 
-Für eine Liste von Abkürzungen den Property-Typ `smart_content` verwenden:
+```console
+bin/console sulu:search:reindex
+```
+
+Berechtigungen unter **Einstellungen > Benutzerrollen** vergeben: Sicherheitskontext `sulu.glossary.entries` (anzeigen, hinzufügen, bearbeiten, löschen, live) und `sulu.glossary.settings` (anzeigen, bearbeiten).
+
+## Verwendung
+
+### Auswahl und Smart Content
+
 ```xml
-<property name="abbreviations" type="smart_content">
+<property name="entries" type="glossary_entry_selection">
     <meta>
-        <title lang="de">Abkürzungen</title>
+        <title lang="de">Glossar-Einträge</title>
+    </meta>
+</property>
+
+<property name="entry" type="single_glossary_entry_selection">
+    <meta>
+        <title lang="de">Glossar-Eintrag</title>
+    </meta>
+</property>
+
+<property name="list" type="smart_content">
+    <meta>
+        <title lang="de">Glossar</title>
     </meta>
     <params>
-        <param name="provider" value="abbreviations"/>
-        <param name="max_per_page" value="5"/>
-        <param name="page_parameter" value="page"/>
+        <param name="provider" value="glossary_entries"/>
+        <param name="max_per_page" value="10"/>
     </params>
 </property>
 ```
-Zur Auswahl einzelner Abkürzungen in einem Template die Feldtypen `abbreviation_selection` (mehrere) oder `single_abbreviation_selection` (eine) verwenden. Es werden nur in der aktuellen Sprache veröffentlichte Abkürzungen in der Reihenfolge der Auswahl geliefert.
+
+### Twig
 
 ```twig
-{% for abbreviation in abbreviations %}
-    <h2>{{ abbreviation.name }}</h2>
-    <p>{{ abbreviation.explanation|raw }}</p>
+{% set entry = sulu_resolve_glossary_entry(id) %}
+{% if entry %}
+    <abbr title="{{ entry.explanation }}">{{ entry.title }}</abbr>
+{% endif %}
+
+{% for entry in sulu_get_glossary_entries(20) %}
+    {{ entry.title }} ({{ entry.type }})
 {% endfor %}
 ```
 
-Die Detailseite einer Abkürzung wird mit dem Template `@SuluAbbreviations/abbreviation.html.twig` gerendert (Variable `content`), überschreibbar mit `templates/bundles/SuluAbbreviationsBundle/abbreviation.html.twig`.
-Weitere Templates des Typs `abbreviation` lassen sich über `sulu_core.content.structure.paths` ergänzen.
+### Eigene Templates
 
-### Twig-Funktionen
-- `sulu_resolve_abbreviation(id, locale = null)`: liefert den Live-Inhalt der Abkürzung, wenn sie in der Sprache veröffentlicht ist, sonst `null`.
-- `sulu_get_abbreviations(limit = 100, locale = null)`: liefert die veröffentlichten Abkürzungen der Sprache.
-- Filter `abbr` (optional): umschließt die bekannten Abkürzungen eines Textes mit `<abbr>`.
+Das Bundle liefert das Template `default`. Eigene Templates liegen in `config/templates/glossary_entries/*.xml` (Template-Typ `glossary_entry`), eigene Views in `templates/`.
 
-## 🧶 Konfiguration
+## Konfiguration
+
 ```yaml
-sulu_abbreviations:
+# config/packages/sulu_glossary.yaml
+sulu_glossary:
     versioning:
-        max_versions: 20 # Versionen je Abkürzung und Sprache, 0 deaktiviert die Versionierung
+        max_versions: 20   # Versionen pro Eintrag und Sprache, 0 = unbegrenzt
     twig:
-        auto_abbr: false # registriert den Twig-Filter "abbr"
+        auto_abbr: false   # aktiviert den Twig-Filter abbr
 ```
-Die Einstellungen im Admin (Abkürzungen > Einstellungen) steuern die Einzelansicht (Header, Standard-Hero, Breadcrumbs) und die Zwischenseite für die Breadcrumbs.
 
-Alle Änderungen stehen in der [CHANGELOG.md](CHANGELOG.md).
+## Dokumentation
 
-## 👩‍🍳 Mitwirken
-Der Einfachheit halber wurde die Erweiterung klein gehalten.
-Issues und Pull Requests sind jederzeit willkommen. Über Feedback zur Verbesserung freue ich mich :).
+Alle Funktionsdokumente gibt es auf Englisch und Deutsch im Verzeichnis [docs](docs).
+
+## Mitwirken
+
+Pull Requests sind willkommen. Bitte vorher die Prüfungen ausführen:
+
+```console
+composer test
+composer phpstan
+composer cs
+```
+
+## Lizenz
+
+MIT, siehe [LICENSE](LICENSE).
