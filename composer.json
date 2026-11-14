@@ -42,6 +42,7 @@
         "symfony/phpunit-bridge": "^6.4 | ^7.0",
         "symfony/var-exporter": "^6.4 | ^7.0",
         "cmsig/seal-memory-adapter": "^0.12",
+        "manuxi/sulu-dashboard-bundle": "^1.0",
         "sulu/automation-bundle": "^3.0"
     },
     "suggest": {

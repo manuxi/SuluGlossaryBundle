@@ -11,8 +11,8 @@ if (!file_exists($file)) {
 require $file;
 
 /*
- * manuxi/sulu-dashboard-bundle is an optional dependency ("suggest") and not part of composer.json. To run the tests
- * of the dashboard tile and PHPStan, point SULU_DASHBOARD_BUNDLE_PATH to a checkout of the bundle:
+ * manuxi/sulu-dashboard-bundle is an optional dependency for users ("suggest") and a dev dependency here, so it is
+ * normally found in vendor. If it is missing, point SULU_DASHBOARD_BUNDLE_PATH to a checkout of the bundle:
  *
  *     SULU_DASHBOARD_BUNDLE_PATH=/path/to/SuluDashboardBundle vendor/bin/phpunit
  */

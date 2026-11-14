@@ -9,7 +9,6 @@ use Manuxi\SuluDashboardBundle\Widget\WidgetColumns;
 use Manuxi\SuluDashboardBundle\Widget\WidgetTypes;
 use Manuxi\SuluGlossaryBundle\Admin\GlossaryEntryAdmin;
 use Manuxi\SuluGlossaryBundle\Entity\GlossaryEntry;
-use Manuxi\SuluGlossaryBundle\Entity\GlossaryEntryDimensionContent;
 use Manuxi\SuluGlossaryBundle\Repository\GlossaryEntryRepositoryInterface;
 use Sulu\Component\Localization\Manager\LocalizationManagerInterface;
 use Sulu\Component\Webspace\Manager\WebspaceManagerInterface;
@@ -68,6 +67,9 @@ final class GlossaryWidget implements DashboardWidgetInterface
         return 10;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getData(string $locale): array
     {
         $locales = array_values($this->localizationManager->getLocales());
@@ -188,8 +190,7 @@ final class GlossaryWidget implements DashboardWidgetInterface
         foreach ($entries as $entry) {
             $candidates = [];
             foreach ($entry->getDimensionContents() as $dimensionContent) {
-                if ($dimensionContent instanceof GlossaryEntryDimensionContent
-                    && DimensionContentInterface::STAGE_DRAFT === $dimensionContent->getStage()
+                if (DimensionContentInterface::STAGE_DRAFT === $dimensionContent->getStage()
                     && \is_string($dimensionContent->getTitle())
                     && '' !== $dimensionContent->getTitle()
                 ) {
