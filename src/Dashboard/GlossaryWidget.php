@@ -12,9 +12,8 @@ use Manuxi\SuluGlossaryBundle\Entity\GlossaryEntry;
 use Manuxi\SuluGlossaryBundle\Entity\GlossaryEntryDimensionContent;
 use Manuxi\SuluGlossaryBundle\Repository\GlossaryEntryRepositoryInterface;
 use Sulu\Component\Localization\Manager\LocalizationManagerInterface;
+use Sulu\Component\Webspace\Manager\WebspaceManagerInterface;
 use Sulu\Content\Domain\Model\DimensionContentInterface;
-use Symfony\Component\Intl\Exception\MissingResourceException;
-use Symfony\Component\Intl\Languages;
 
 /**
  * Tile for the dashboard of manuxi/sulu-dashboard-bundle: number of glossary entries, how many of them are not
@@ -35,6 +34,7 @@ final class GlossaryWidget implements DashboardWidgetInterface
     public function __construct(
         private readonly GlossaryEntryRepositoryInterface $repository,
         private readonly LocalizationManagerInterface $localizationManager,
+        private readonly WebspaceManagerInterface $webspaceManager,
     ) {
     }
 
@@ -74,7 +74,7 @@ final class GlossaryWidget implements DashboardWidgetInterface
         $total = $this->repository->countBy();
 
         if ([] === $locales) {
-            return $this->result($this->summary($total, null, null, $locale), [], []);
+            return $this->result($this->summary($total, null, null), [], []);
         }
 
         $translated = [];
@@ -87,7 +87,7 @@ final class GlossaryWidget implements DashboardWidgetInterface
 
         $current = \in_array($locale, $locales, true) ? $locale : $locales[0];
         $multiple = \count($locales) > 1;
-        $summary = $this->summary($total, $unpublished[$current], $multiple ? $current : null, $locale);
+        $summary = $this->summary($total, $unpublished[$current], $multiple ? $current : null);
 
         if (!$multiple || 0 === $total) {
             return $this->result($summary, [], []);
@@ -97,7 +97,7 @@ final class GlossaryWidget implements DashboardWidgetInterface
         foreach ($locales as $entryLocale) {
             $missing = max(0, $total - $translated[$entryLocale]);
             $item = [
-                'label' => $this->languageName($entryLocale, $locale),
+                'label' => $this->languageName($entryLocale),
                 'value' => $translated[$entryLocale],
                 'max' => $total,
                 'text' => [
@@ -117,7 +117,7 @@ final class GlossaryWidget implements DashboardWidgetInterface
             $items[] = $item;
         }
 
-        return $this->result($summary, $items, $this->missingRows($locales));
+        return $this->result($summary, $items, $this->missingRows($locales, $this->sourceLocale($locales)));
     }
 
     /**
@@ -125,7 +125,7 @@ final class GlossaryWidget implements DashboardWidgetInterface
      *
      * @return list<array<string, mixed>>
      */
-    private function missingRows(array $locales): array
+    private function missingRows(array $locales, string $sourceLocale): array
     {
         $allIds = array_values(array_map('strval', [...$this->repository->findIdentifiersBy()]));
         $missing = [];
@@ -153,7 +153,7 @@ final class GlossaryWidget implements DashboardWidgetInterface
             return [];
         }
 
-        $titles = $this->titles(array_merge(...array_values($missing)), $locales[0]);
+        $titles = $this->titles(array_merge(...array_values($missing)), $sourceLocale);
         $rows = [];
         foreach ($missing as $entryLocale => $ids) {
             foreach ($ids as $id) {
@@ -211,7 +211,7 @@ final class GlossaryWidget implements DashboardWidgetInterface
     /**
      * @return array<string, mixed>|string
      */
-    private function summary(int $total, ?int $unpublished, ?string $language, string $uiLocale): array|string
+    private function summary(int $total, ?int $unpublished, ?string $language): array|string
     {
         if (0 === $total) {
             return 'sulu_glossary.dashboard_empty';
@@ -226,7 +226,7 @@ final class GlossaryWidget implements DashboardWidgetInterface
             'parameters' => [
                 'total' => $total,
                 'unpublished' => $unpublished,
-                'language' => null === $language ? '' : $this->languageName($language, $uiLocale),
+                'language' => null === $language ? '' : $this->languageName($language),
             ],
         ];
     }
@@ -249,14 +249,23 @@ final class GlossaryWidget implements DashboardWidgetInterface
         return $data;
     }
 
-    private function languageName(string $language, string $uiLocale): string
+    /**
+     * The original language: the default language of the first webspace (like the translations tile of the dashboard),
+     * otherwise the first language. It only decides which title is shown for an entry that is missing elsewhere.
+     *
+     * @param list<string> $locales
+     */
+    private function sourceLocale(array $locales): string
     {
-        $code = strtolower(explode('_', str_replace('-', '_', $language))[0]);
-
-        try {
-            return ucfirst(Languages::getName($code, explode('_', str_replace('-', '_', $uiLocale))[0]));
-        } catch (MissingResourceException) {
-            return strtoupper($language);
+        foreach ($this->webspaceManager->getWebspaceCollection() as $webspace) {
+            return $webspace->getDefaultLocalization()->getLocale();
         }
+
+        return $locales[0];
+    }
+
+    private function languageName(string $language): string
+    {
+        return strtoupper($language);
     }
 }

@@ -12,7 +12,11 @@ use Manuxi\SuluGlossaryBundle\Entity\GlossaryEntryDimensionContent;
 use Manuxi\SuluGlossaryBundle\Repository\GlossaryEntryRepositoryInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Sulu\Component\Localization\Localization;
 use Sulu\Component\Localization\Manager\LocalizationManagerInterface;
+use Sulu\Component\Webspace\Manager\WebspaceCollection;
+use Sulu\Component\Webspace\Manager\WebspaceManagerInterface;
+use Sulu\Component\Webspace\Webspace;
 use Sulu\Content\Domain\Model\DimensionContentInterface;
 
 class GlossaryWidgetTest extends TestCase
@@ -127,11 +131,11 @@ class GlossaryWidgetTest extends TestCase
         $data = $this->widget(['de', 'en'])->getData('en');
 
         self::assertSame('sulu_glossary.dashboard_summary_unpublished_language', $data['text']['key']);
-        self::assertSame(['total' => 3, 'unpublished' => 1, 'language' => 'English'], $data['text']['parameters']);
+        self::assertSame(['total' => 3, 'unpublished' => 1, 'language' => 'EN'], $data['text']['parameters']);
         self::assertSame('bar', $data['display']);
 
         [$de, $en] = $data['items'];
-        self::assertSame('German', $de['label']);
+        self::assertSame('DE', $de['label']);
         self::assertSame(3, $de['value']);
         self::assertSame(3, $de['max']);
         self::assertSame('success', $de['skin']);
@@ -165,6 +169,17 @@ class GlossaryWidgetTest extends TestCase
         self::assertSame(0, $data['items'][1]['value']);
     }
 
+    public function testTitleComesFromTheDefaultLanguageOfTheFirstWebspace(): void
+    {
+        $this->add('a', ['de' => ['draft', 'live'], 'en' => ['draft', 'live']], ['de' => 'Alpha DE', 'en' => 'Alpha EN']);
+        $this->add('b', ['de' => ['draft', 'live']], ['de' => 'Beta DE']);
+        $this->add('c', ['en' => ['draft', 'live']], ['en' => 'Gamma EN']);
+
+        $rows = $this->widget(['de', 'en'], 'en')->getData('de')['footer']['rows'];
+
+        self::assertSame(['Gamma EN (DE)', 'Beta DE (EN)'], array_column($rows, 'title'));
+    }
+
     public function testEntryWithoutTitleFallsBackToItsId(): void
     {
         $this->add('only-id', ['de' => ['draft', 'live']]);
@@ -192,11 +207,21 @@ class GlossaryWidgetTest extends TestCase
     /**
      * @param list<string> $locales
      */
-    private function widget(array $locales): GlossaryWidget
+    private function widget(array $locales, ?string $defaultLocale = null): GlossaryWidget
     {
+        $webspaces = [];
+        if (null !== $defaultLocale) {
+            $localization = new Localization($defaultLocale);
+            $webspace = $this->createMock(Webspace::class);
+            $webspace->method('getDefaultLocalization')->willReturn($localization);
+            $webspaces['test'] = $webspace;
+        }
+        $webspaceManager = $this->createMock(WebspaceManagerInterface::class);
+        $webspaceManager->method('getWebspaceCollection')->willReturn(new WebspaceCollection($webspaces));
+
         $localizationManager = $this->createMock(LocalizationManagerInterface::class);
         $localizationManager->method('getLocales')->willReturn($locales);
 
-        return new GlossaryWidget($this->repository, $localizationManager);
+        return new GlossaryWidget($this->repository, $localizationManager, $webspaceManager);
     }
 }

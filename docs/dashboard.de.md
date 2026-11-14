@@ -12,6 +12,8 @@ composer require manuxi/sulu-dashboard-bundle
 - Bei mehr als einer Sprache je Sprache einen Balken: wie viele Einträge übersetzt sind, grün bei vollständiger, orange bei unvollständiger Übersetzung, dazu die Zahl der nicht veröffentlichten Einträge dieser Sprache.
 - **Was fehlt?**: bis zu fünf Einträge, die in einer Sprache noch fehlen. Ein Klick öffnet das Formular des Eintrags in dieser Sprache.
 
+Die Balken tragen das Sprachkürzel (`DE`, `EN`). Als Original gilt die Standardsprache des ersten Webspaces (wie bei der Übersetzungs-Kachel des Dashboards); sie bestimmt nur, welcher Titel in **Was fehlt?** erscheint. Hat ein Eintrag dort keinen Titel, wird eine andere Sprache genommen. Weil Glossar-Einträge keinem Webspace gehören, gilt diese Einschränkung bei Installationen mit mehreren Webspaces und unterschiedlichen Standardsprachen.
+
 Die Kachel steht in der schmalen Spalte. Sie braucht das Recht **Ansehen** für `sulu.glossary.entries` und liest die Daten nur, über das Repository des Bundles.
 
 Die letzten Änderungen zeigt die Kachel **Letzte Aktivität** des Dashboards; das Bundle protokolliert seine Ereignisse dort (siehe [Veröffentlichen](publishing.de.md)). Die Übersetzungs-Kachel des Dashboards zählt Seiten und Artikel, keine Glossar-Einträge, deshalb übernimmt diese Kachel die Sprachübersicht.

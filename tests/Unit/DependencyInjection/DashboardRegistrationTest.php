@@ -25,7 +25,7 @@ class DashboardRegistrationTest extends TestCase
 
         $definition = $container->getDefinition(GlossaryWidget::class);
         self::assertTrue($definition->isAutoconfigured());
-        self::assertCount(2, $definition->getArguments());
+        self::assertCount(3, $definition->getArguments());
         self::assertSame('sulu.core.localization_manager', (string) $definition->getArgument(1));
     }
 

@@ -5,3 +5,4 @@ services:
         arguments:
             - '@Manuxi\SuluGlossaryBundle\Repository\GlossaryEntryRepositoryInterface'
             - '@sulu.core.localization_manager'
+            - '@sulu_core.webspace.webspace_manager'

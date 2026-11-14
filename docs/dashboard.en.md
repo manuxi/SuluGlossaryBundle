@@ -12,6 +12,8 @@ composer require manuxi/sulu-dashboard-bundle
 - With more than one language, a bar per language: how many entries are translated, green when complete and orange when incomplete, plus the number of unpublished entries of that language.
 - **What is missing?**: up to five entries that are still missing in a language. A click opens the form of the entry in that language.
 
+The bars carry the language code (`DE`, `EN`). The original language is the default language of the first webspace (like the translations tile of the dashboard); it only decides which title appears in **What is missing?**. If an entry has no title there, another language is used. Glossary entries do not belong to a webspace, so this limitation applies to installations with several webspaces and different default languages.
+
 The tile sits in the narrow column. It needs the **View** permission for `sulu.glossary.entries` and only reads data, through the repository of the bundle.
 
 The latest changes are shown by the **Recent activity** tile of the dashboard; the bundle logs its events there (see [Publishing](publishing.en.md)). The translations tile of the dashboard counts pages and articles, not glossary entries, so this tile provides the language overview.
