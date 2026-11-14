@@ -34,6 +34,16 @@ class SuluGlossaryExtension extends Extension implements PrependExtensionInterfa
         if (interface_exists(\Sulu\Bundle\AutomationBundle\TaskHandler\AutomationTaskHandlerInterface::class)) {
             $loader->load('services-automation.yaml');
         }
+
+        // The dashboard is optional (composer "suggest"): the tile is only loaded if its interface is available.
+        // The interface is given as a string, so this bundle does not need the dashboard bundle.
+        if (ContainerBuilder::willBeAvailable(
+            'manuxi/sulu-dashboard-bundle',
+            'Manuxi\SuluDashboardBundle\Widget\DashboardWidgetInterface',
+            ['manuxi/sulu-glossary-bundle']
+        )) {
+            $loader->load('dashboard.yaml');
+        }
     }
 
     public function prepend(ContainerBuilder $container): void

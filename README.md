@@ -153,6 +153,7 @@ Detailed documentation in the [docs/](docs/) directory.
 - [HTTP cache](docs/http-cache.en.md) - Tagging and invalidation
 - [Automation](docs/automation.en.md) - Scheduled publishing
 - [Settings](docs/settings.en.md) - Header, hero, breadcrumbs, overview page
+- [Dashboard](docs/dashboard.en.md) - Tile with the number of entries, unpublished entries and missing translations (optional)
 - [Upgrade from SuluAbbreviationsBundle](docs/upgrade-from-abbreviations.en.md) - Migration of the data
 
 ## 👩‍🍳 Contributing

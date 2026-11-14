@@ -9,6 +9,13 @@ sulu_glossary:
     select_glossary_entry: "Select glossary entry"
     select_glossary_entries: "Select glossary entries"
     no_glossary_entry_selected: "No glossary entry selected"
+    dashboard_empty: "No entries yet."
+    dashboard_summary: "{total, plural, one {# entry} other {# entries}}."
+    dashboard_summary_unpublished: "{total, plural, one {# entry} other {# entries}}, {unpublished} of them not published."
+    dashboard_summary_unpublished_language: "{total, plural, one {# entry} other {# entries}}, {unpublished} of them not published in {language}."
+    dashboard_translated: "{done} of {total} translated"
+    dashboard_unpublished: "{count} not published"
+    dashboard_missing: "What is missing?"
 
     template:
         default: "Glossary entry"

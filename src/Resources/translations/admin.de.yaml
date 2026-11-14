@@ -9,6 +9,13 @@ sulu_glossary:
     select_glossary_entry: "Glossareintrag auswählen"
     select_glossary_entries: "Glossareinträge auswählen"
     no_glossary_entry_selected: "Kein Glossareintrag ausgewählt"
+    dashboard_empty: "Noch keine Einträge."
+    dashboard_summary: "{total, plural, one {# Eintrag} other {# Einträge}}."
+    dashboard_summary_unpublished: "{total, plural, one {# Eintrag} other {# Einträge}}, davon {unpublished} nicht veröffentlicht."
+    dashboard_summary_unpublished_language: "{total, plural, one {# Eintrag} other {# Einträge}}, davon {unpublished} in {language} nicht veröffentlicht."
+    dashboard_translated: "{done} von {total} übersetzt"
+    dashboard_unpublished: "{count} nicht veröffentlicht"
+    dashboard_missing: "Was fehlt?"
 
     template:
         default: "Glossareintrag"

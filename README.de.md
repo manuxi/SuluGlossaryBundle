@@ -153,6 +153,7 @@ Detaillierte Dokumentation im [docs/](docs/) Verzeichnis.
 - [HTTP-Cache](docs/http-cache.de.md) - Tagging und Invalidierung
 - [Automatisierung](docs/automation.de.md) - Zeitgesteuertes Veröffentlichen
 - [Einstellungen](docs/settings.de.md) - Header, Hero, Breadcrumbs, Übersichtsseite
+- [Dashboard](docs/dashboard.de.md) - Kachel mit Anzahl, unveröffentlichten Einträgen und fehlenden Übersetzungen (optional)
 - [Upgrade vom SuluAbbreviationsBundle](docs/upgrade-from-abbreviations.de.md) - Migration der Daten
 
 ## 👩‍🍳 Mitwirken

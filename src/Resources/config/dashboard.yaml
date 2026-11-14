@@ -1,0 +1,7 @@
+# Loaded only if manuxi/sulu-dashboard-bundle is installed (see SuluGlossaryExtension).
+services:
+    Manuxi\SuluGlossaryBundle\Dashboard\GlossaryWidget:
+        autoconfigure: true
+        arguments:
+            - '@Manuxi\SuluGlossaryBundle\Repository\GlossaryEntryRepositoryInterface'
+            - '@sulu.core.localization_manager'

@@ -46,7 +46,8 @@
     },
     "suggest": {
         "sulu/automation-bundle": "Allows to schedule publishing and unpublishing of glossary entries",
-        "manuxi/sulu-admin-extras-bundle": "Provides additional admin components such as the ghost locale and publish state field types"
+        "manuxi/sulu-admin-extras-bundle": "Provides additional admin components such as the ghost locale and publish state field types",
+        "manuxi/sulu-dashboard-bundle": "Shows a glossary tile on the dashboard: number of entries, unpublished entries and missing translations"
     },
     "autoload": {
         "psr-4": {

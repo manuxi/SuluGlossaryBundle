@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- Optional tile for `manuxi/sulu-dashboard-bundle` (suggested, not required): number of entries, unpublished entries and the translation status per language with a list of what is missing, see `docs/dashboard.en.md`
+
 ## 1.0.0
 
 First release of SuluGlossaryBundle, the Sulu 3 successor of `manuxi/sulu-abbreviations-bundle`.
